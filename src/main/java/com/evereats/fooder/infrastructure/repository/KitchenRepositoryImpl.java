@@ -32,7 +32,7 @@ public class KitchenRepositoryImpl implements KitchenRepository {
     @Override
     @Transactional
     public void remove(Kitchen kitchen) {
-        kitchen = find(kitchen.getId());
+        kitchen = findById(kitchen.getId());
         entityManager.remove(kitchen);
     }
 }
