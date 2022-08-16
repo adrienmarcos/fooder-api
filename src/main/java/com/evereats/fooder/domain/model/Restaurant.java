@@ -19,6 +19,6 @@ public class Restaurant {
 
     private String name;
 
-    @Column(name = "tb_freight_tax")
+    @Column(name = "freight_tax")
     private BigDecimal freightTax;
 }
