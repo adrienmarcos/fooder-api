@@ -2,11 +2,13 @@ package com.evereats.fooder.infrastructure.repository;
 
 import com.evereats.fooder.domain.model.Restaurant;
 import com.evereats.fooder.domain.repository.RestaurantRepository;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
+@Component
 public class RestaurantRepositoryImpl implements RestaurantRepository {
 
     @PersistenceContext

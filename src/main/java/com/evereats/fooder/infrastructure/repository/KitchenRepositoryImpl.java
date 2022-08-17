@@ -2,12 +2,14 @@ package com.evereats.fooder.infrastructure.repository;
 
 import com.evereats.fooder.domain.model.Kitchen;
 import com.evereats.fooder.domain.repository.KitchenRepository;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
 
+@Component
 public class KitchenRepositoryImpl implements KitchenRepository {
 
     @PersistenceContext
