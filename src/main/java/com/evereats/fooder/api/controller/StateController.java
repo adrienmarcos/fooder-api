@@ -2,6 +2,7 @@ package com.evereats.fooder.api.controller;
 
 import com.evereats.fooder.domain.model.State;
 import com.evereats.fooder.domain.repository.StateRepository;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +19,7 @@ public class StateController {
         this.stateRepository = stateRepository;
     }
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<State> list() {
         return stateRepository.list();
     }
