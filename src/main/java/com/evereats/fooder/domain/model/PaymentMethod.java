@@ -7,9 +7,9 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "tb_kitchens")
+@Table(name = "tb_payment_methods")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Kitchen {
+public class PaymentMethod {
 
     @Id
     @EqualsAndHashCode.Include
@@ -17,5 +17,5 @@ public class Kitchen {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String description;
 }

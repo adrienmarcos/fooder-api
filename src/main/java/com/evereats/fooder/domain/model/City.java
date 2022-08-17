@@ -7,9 +7,9 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "tb_kitchens")
+@Table(name = "tb_cities")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Kitchen {
+public class City {
 
     @Id
     @EqualsAndHashCode.Include
@@ -18,4 +18,8 @@ public class Kitchen {
 
     @Column(nullable = false)
     private String name;
+
+    @OneToOne
+    @JoinColumn(name = "state_id", nullable = false)
+    private State state;
 }

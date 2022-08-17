@@ -7,9 +7,9 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "tb_kitchens")
+@Table(name = "tb_states")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Kitchen {
+public class State {
 
     @Id
     @EqualsAndHashCode.Include
