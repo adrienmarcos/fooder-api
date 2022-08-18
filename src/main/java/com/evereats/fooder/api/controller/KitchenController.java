@@ -1,15 +1,11 @@
 package com.evereats.fooder.api.controller;
 
-import com.evereats.fooder.api.model.KitchensXmlWrapper;
 import com.evereats.fooder.domain.exception.EntityInUseException;
 import com.evereats.fooder.domain.exception.EntityNotFoundException;
 import com.evereats.fooder.domain.model.Kitchen;
 import com.evereats.fooder.domain.repository.KitchenRepository;
 import com.evereats.fooder.domain.service.KitchenRegisterService;
-import org.springframework.beans.BeanUtils;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,43 +24,31 @@ public class KitchenController {
     }
 
     @GetMapping
-    public List<Kitchen> list() {
-        return kitchenRepository.list();
-    }
-
-    @GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
-    public KitchensXmlWrapper listXml() {
-        return new KitchensXmlWrapper(kitchenRepository.list());
+    public ResponseEntity<List<Kitchen>> list() {
+        return ResponseEntity.status(HttpStatus.OK).body(kitchenRegisterService.list());
     }
 
     @GetMapping("/{kitchenId}")
-    public ResponseEntity<Kitchen> find(@PathVariable("kitchenId") Long kitchenId) {
-        Kitchen kitchen = kitchenRepository.findById(kitchenId);
-
-        if (kitchen != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(kitchen);
+    public ResponseEntity<Kitchen> find(@PathVariable("kitchenId") Long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(kitchenRegisterService.find(id));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Kitchen add(@RequestBody Kitchen kitchen) {
-        return kitchenRegisterService.save(kitchen);
+    public ResponseEntity<Kitchen> save(@RequestBody Kitchen kitchen) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(kitchenRegisterService.save(kitchen));
     }
 
-    @PutMapping("/{kitchenId}")
-    public ResponseEntity<Kitchen> update(@PathVariable("kitchenId") Long kitchenId, @RequestBody Kitchen kitchen) {
-        Kitchen currentKitchen = kitchenRepository.findById(kitchenId);
-
-        if (currentKitchen != null) {
-            BeanUtils.copyProperties(kitchen, currentKitchen, "id");
-            currentKitchen = kitchenRepository.save(currentKitchen);
-            return ResponseEntity.status(HttpStatus.OK).body(currentKitchen);
+    @PutMapping
+    public ResponseEntity<Kitchen> update(@RequestBody Kitchen kitchen) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(kitchenRegisterService.update(kitchen));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @DeleteMapping("/{kitchenId}")

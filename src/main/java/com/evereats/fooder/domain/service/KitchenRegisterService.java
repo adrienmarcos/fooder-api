@@ -4,11 +4,12 @@ import com.evereats.fooder.domain.exception.EntityInUseException;
 import com.evereats.fooder.domain.exception.EntityNotFoundException;
 import com.evereats.fooder.domain.model.Kitchen;
 import com.evereats.fooder.domain.repository.KitchenRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class KitchenRegisterService {
@@ -19,8 +20,28 @@ public class KitchenRegisterService {
         this.kitchenRepository = kitchenRepository;
     }
 
+    public List<Kitchen> list() {
+        return kitchenRepository.list();
+    }
+
+    public Kitchen find(Long id) {
+        Kitchen kitchen = kitchenRepository.findById(id);
+
+        if (kitchen == null) {
+            throw new EntityNotFoundException(String.format("Não existe um registro de cozinha de código %d", id));
+        }
+
+        return kitchen;
+    }
+
     public Kitchen save(Kitchen kitchen) {
         return kitchenRepository.save(kitchen);
+    }
+
+    public Kitchen update(Kitchen kitchen) {
+        Kitchen currentKitchen = find(kitchen.getId());
+        BeanUtils.copyProperties(kitchen, currentKitchen);
+        return kitchenRepository.save(currentKitchen);
     }
 
     public void delete(Long id) {
