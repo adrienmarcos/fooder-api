@@ -3,7 +3,6 @@ package com.evereats.fooder.api.controller;
 import com.evereats.fooder.domain.exception.EntityInUseException;
 import com.evereats.fooder.domain.exception.EntityNotFoundException;
 import com.evereats.fooder.domain.model.Kitchen;
-import com.evereats.fooder.domain.repository.KitchenRepository;
 import com.evereats.fooder.domain.service.KitchenRegisterService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +14,9 @@ import java.util.List;
 @RequestMapping("/kitchens")
 public class KitchenController {
 
-    private KitchenRepository kitchenRepository;
     private KitchenRegisterService kitchenRegisterService;
 
-    public KitchenController(KitchenRepository kitchenRepository, KitchenRegisterService kitchenRegisterService) {
-        this.kitchenRepository = kitchenRepository;
+    public KitchenController(KitchenRegisterService kitchenRegisterService) {
         this.kitchenRegisterService = kitchenRegisterService;
     }
 

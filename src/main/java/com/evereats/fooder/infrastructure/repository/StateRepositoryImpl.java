@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Component
@@ -25,12 +26,14 @@ public class StateRepositoryImpl implements StateRepository {
     }
 
     @Override
-    public State add(State state) {
+    @Transactional
+    public State save(State state) {
         return entityManager.merge(state);
     }
 
     @Override
-    public void remove(State state) {
+    @Transactional
+    public void delete(State state) {
         state = findById(state.getId());
         entityManager.remove(state);
     }
