@@ -4,6 +4,7 @@ import com.evereats.fooder.api.model.KitchensXmlWrapper;
 import com.evereats.fooder.domain.model.Kitchen;
 import com.evereats.fooder.domain.repository.KitchenRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -63,13 +64,17 @@ public class KitchenController {
 
     @DeleteMapping("/{kitchenId}")
     public ResponseEntity<Kitchen> delete(@PathVariable("kitchenId") Long kitchenId) {
-        Kitchen kitchen = kitchenRepository.findById(kitchenId);
+        try {
+            Kitchen kitchen = kitchenRepository.findById(kitchenId);
 
-        if (kitchen != null) {
-            kitchenRepository.remove(kitchen);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            if (kitchen != null) {
+                kitchenRepository.remove(kitchen);
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            }
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }
