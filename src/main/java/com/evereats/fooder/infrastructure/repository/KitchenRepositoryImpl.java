@@ -2,6 +2,7 @@ package com.evereats.fooder.infrastructure.repository;
 
 import com.evereats.fooder.domain.model.Kitchen;
 import com.evereats.fooder.domain.repository.KitchenRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -27,14 +28,19 @@ public class KitchenRepositoryImpl implements KitchenRepository {
 
     @Override
     @Transactional
-    public Kitchen add(Kitchen kitchen) {
+    public Kitchen save(Kitchen kitchen) {
         return entityManager.merge(kitchen);
     }
 
     @Override
     @Transactional
-    public void remove(Kitchen kitchen) {
-        kitchen = findById(kitchen.getId());
+    public void delete(Long id) {
+        Kitchen kitchen = findById(id);
+
+        if (kitchen == null) {
+            throw new EmptyResultDataAccessException(1);
+        }
+
         entityManager.remove(kitchen);
     }
 }

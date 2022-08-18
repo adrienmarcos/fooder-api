@@ -1,8 +1,11 @@
 package com.evereats.fooder.api.controller;
 
 import com.evereats.fooder.api.model.KitchensXmlWrapper;
+import com.evereats.fooder.domain.exception.EntityInUseException;
+import com.evereats.fooder.domain.exception.EntityNotFoundException;
 import com.evereats.fooder.domain.model.Kitchen;
 import com.evereats.fooder.domain.repository.KitchenRepository;
+import com.evereats.fooder.domain.service.KitchenRegisterService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -17,9 +20,11 @@ import java.util.List;
 public class KitchenController {
 
     private KitchenRepository kitchenRepository;
+    private KitchenRegisterService kitchenRegisterService;
 
-    public KitchenController(KitchenRepository kitchenRepository) {
+    public KitchenController(KitchenRepository kitchenRepository, KitchenRegisterService kitchenRegisterService) {
         this.kitchenRepository = kitchenRepository;
+        this.kitchenRegisterService = kitchenRegisterService;
     }
 
     @GetMapping
@@ -46,7 +51,7 @@ public class KitchenController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Kitchen add(@RequestBody Kitchen kitchen) {
-        return kitchenRepository.add(kitchen);
+        return kitchenRegisterService.save(kitchen);
     }
 
     @PutMapping("/{kitchenId}")
@@ -55,7 +60,7 @@ public class KitchenController {
 
         if (currentKitchen != null) {
             BeanUtils.copyProperties(kitchen, currentKitchen, "id");
-            currentKitchen = kitchenRepository.add(currentKitchen);
+            currentKitchen = kitchenRepository.save(currentKitchen);
             return ResponseEntity.status(HttpStatus.OK).body(currentKitchen);
         }
 
@@ -63,18 +68,14 @@ public class KitchenController {
     }
 
     @DeleteMapping("/{kitchenId}")
-    public ResponseEntity<Kitchen> delete(@PathVariable("kitchenId") Long kitchenId) {
+    public ResponseEntity<Kitchen> delete(@PathVariable("kitchenId") Long id) {
         try {
-            Kitchen kitchen = kitchenRepository.findById(kitchenId);
-
-            if (kitchen != null) {
-                kitchenRepository.remove(kitchen);
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            }
-
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        } catch (DataIntegrityViolationException e) {
+            kitchenRegisterService.delete(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (EntityInUseException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 }
