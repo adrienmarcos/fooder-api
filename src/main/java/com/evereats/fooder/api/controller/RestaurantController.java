@@ -43,7 +43,8 @@ public class RestaurantController {
         }
     }
 
-    @PutMapping ResponseEntity<Restaurant> update(@RequestBody Restaurant restaurant) {
+    @PutMapping
+    public ResponseEntity<Restaurant> update(@RequestBody Restaurant restaurant) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(restaurantRegisterService.update(restaurant));
         } catch (EntityNotFoundException e) {

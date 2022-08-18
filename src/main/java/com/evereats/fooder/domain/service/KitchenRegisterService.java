@@ -49,8 +49,7 @@ public class KitchenRegisterService {
         try {
             kitchenRepository.delete(id);
         } catch(EmptyResultDataAccessException e) {
-            throw new EntityNotFoundException(
-                    String.format("Não existe um registro de cozinha de código %d", id));
+            throw new EntityNotFoundException(String.format("Não existe um registro de cozinha de código %d", id));
         } catch (DataIntegrityViolationException e) {
             throw new EntityInUseException(
                     String.format("Cozinha de código %d não pode ser removida, pois está em uso", id));
