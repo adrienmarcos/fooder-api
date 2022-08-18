@@ -3,13 +3,11 @@ package com.evereats.fooder.api.controller;
 import com.evereats.fooder.api.model.KitchensXmlWrapper;
 import com.evereats.fooder.domain.model.Kitchen;
 import com.evereats.fooder.domain.repository.KitchenRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,11 +32,42 @@ public class KitchenController {
     }
 
     @GetMapping("/{kitchenId}")
-    public ResponseEntity<Kitchen> find(@PathVariable("kitchenId") Long id) {
-        Kitchen kitchen = kitchenRepository.findById(id);
+    public ResponseEntity<Kitchen> find(@PathVariable("kitchenId") Long kitchenId) {
+        Kitchen kitchen = kitchenRepository.findById(kitchenId);
 
         if (kitchen != null) {
             return ResponseEntity.status(HttpStatus.OK).body(kitchen);
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Kitchen add(@RequestBody Kitchen kitchen) {
+        return kitchenRepository.add(kitchen);
+    }
+
+    @PutMapping("/{kitchenId}")
+    public ResponseEntity<Kitchen> update(@PathVariable("kitchenId") Long kitchenId, @RequestBody Kitchen kitchen) {
+        Kitchen currentKitchen = kitchenRepository.findById(kitchenId);
+
+        if (currentKitchen != null) {
+            BeanUtils.copyProperties(kitchen, currentKitchen, "id");
+            currentKitchen = kitchenRepository.add(currentKitchen);
+            return ResponseEntity.status(HttpStatus.OK).body(currentKitchen);
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @DeleteMapping("/{kitchenId}")
+    public ResponseEntity<Kitchen> delete(@PathVariable("kitchenId") Long kitchenId) {
+        Kitchen kitchen = kitchenRepository.findById(kitchenId);
+
+        if (kitchen != null) {
+            kitchenRepository.remove(kitchen);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
