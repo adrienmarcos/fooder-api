@@ -51,12 +51,12 @@ public class CityRegisterService {
     }
 
     public City update(City city) {
-        City currentCity = cityRepository.findById(city.getId());
+        City currentCity = find(city.getId());
         State state = stateRepository.findById(city.getState().getId());
 
         if (state == null) {
             throw new EntityNotFoundException(
-                    String.format("Não existe um registro de Estado de código %d", city.getId()));
+                    String.format("Não existe um registro de Estado de código %d", city.getState().getId()));
         }
 
         BeanUtils.copyProperties(city, currentCity);

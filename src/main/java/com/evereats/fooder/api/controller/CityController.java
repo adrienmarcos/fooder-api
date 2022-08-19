@@ -44,11 +44,11 @@ public class CityController {
     }
 
     @PutMapping
-    public ResponseEntity<City> update(@RequestBody City city) {
+    public ResponseEntity<?> update(@RequestBody City city) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(cityRegisterService.update(city));
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
