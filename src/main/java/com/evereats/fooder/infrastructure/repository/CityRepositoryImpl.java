@@ -1,7 +1,7 @@
 package com.evereats.fooder.infrastructure.repository;
 
-import com.evereats.fooder.domain.model.State;
-import com.evereats.fooder.domain.repository.StateRepository;
+import com.evereats.fooder.domain.model.City;
+import com.evereats.fooder.domain.repository.CityRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
@@ -11,36 +11,36 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Component
-public class StateRepositoryImpl implements StateRepository {
+public class CityRepositoryImpl implements CityRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
-    public List<State> list() {
-        return entityManager.createQuery("SELECT s FROM State s", State.class).getResultList();
+    public List<City> list() {
+        return entityManager.createQuery("SELECT c FROM City c", City.class).getResultList();
     }
 
     @Override
-    public State findById(Long id) {
-        return entityManager.find(State.class, id);
+    public City findById(Long id) {
+        return entityManager.find(City.class, id);
     }
 
     @Override
     @Transactional
-    public State save(State state) {
-        return entityManager.merge(state);
+    public City save(City city) {
+        return entityManager.merge(city);
     }
 
     @Override
     @Transactional
     public void delete(Long id) {
-        State state = findById(id);
+        City city = findById(id);
 
-        if (state == null) {
+        if (city == null) {
             throw new EmptyResultDataAccessException(1);
         }
 
-        entityManager.remove(state);
+        entityManager.remove(city);
     }
 }

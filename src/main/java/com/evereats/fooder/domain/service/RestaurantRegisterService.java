@@ -32,7 +32,7 @@ public class RestaurantRegisterService {
         Restaurant restaurant = restaurantRepository.findById(id);
 
         if (restaurant == null) {
-            throw new EntityNotFoundException(String.format("Não existe um registro de restaurante de código %d", id));
+            throw new EntityNotFoundException(String.format("Não existe um registro de Restaurante de código %d", id));
         }
 
         return restaurant;
@@ -43,7 +43,7 @@ public class RestaurantRegisterService {
 
         if (kitchen == null) {
             throw new EntityNotFoundException(
-                    String.format("Não existe um registro de cozinha de código %d", restaurant.getKitchen().getId()));
+                    String.format("Não existe um registro de Cozinha de código %d", restaurant.getKitchen().getId()));
         }
 
         restaurant.setKitchen(kitchen);
@@ -56,7 +56,7 @@ public class RestaurantRegisterService {
 
         if (kitchen == null) {
             throw new EntityNotFoundException(
-                    String.format("Não existe um registro de cozinha de código %d", restaurant.getKitchen().getId()));
+                    String.format("Não existe um registro de Cozinha de código %d", restaurant.getKitchen().getId()));
         }
 
         BeanUtils.copyProperties(restaurant, currentRestaurant);
@@ -67,7 +67,7 @@ public class RestaurantRegisterService {
         try {
             restaurantRepository.delete(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new EntityNotFoundException(String.format("Não existe um registro de restaurante de código %d", id));
+            throw new EntityNotFoundException(String.format("Não existe um registro de Restaurante de código %d", id));
         } catch (DataIntegrityViolationException e) {
             throw new EntityInUseException(
                     String.format("Restaurante de código %d não pode ser removido, pois está em uso", id));
