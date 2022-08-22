@@ -12,6 +12,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class RestaurantRegisterService {
@@ -61,6 +62,21 @@ public class RestaurantRegisterService {
 
         BeanUtils.copyProperties(restaurant, currentRestaurant);
         return restaurantRepository.save(currentRestaurant);
+    }
+
+    public Restaurant partialUpdate(Long id, Map<String, Object> fields) {
+        Restaurant restaurant = restaurantRepository.findById(id);
+
+        if (restaurant == null) {
+            throw new EntityNotFoundException(String.format("Não existe um registro de Restaurante de código", id));
+        }
+
+        merge(fields, restaurant);
+        return update(restaurant);
+    }
+
+    private void merge(Map<String, Object> fields, Restaurant restaurant) {
+        //TODO
     }
 
     public void delete(Long id) {
