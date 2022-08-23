@@ -6,11 +6,14 @@ import com.evereats.fooder.domain.model.Kitchen;
 import com.evereats.fooder.domain.model.Restaurant;
 import com.evereats.fooder.domain.repository.KitchenRepository;
 import com.evereats.fooder.domain.repository.RestaurantRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
@@ -75,8 +78,17 @@ public class RestaurantRegisterService {
         return update(restaurant);
     }
 
-    private void merge(Map<String, Object> fields, Restaurant restaurant) {
-        //TODO
+    private void merge(Map<String, Object> fields, Restaurant destiny) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Restaurant origin = objectMapper.convertValue(fields, Restaurant.class);
+
+        fields.forEach((name, value) -> {
+            Field field = ReflectionUtils.findField(Restaurant.class, name);
+            field.setAccessible(true);
+
+            Object newValue = ReflectionUtils.getField(field, origin);
+            ReflectionUtils.setField(field, destiny, newValue);
+        });
     }
 
     public void delete(Long id) {
