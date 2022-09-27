@@ -1,14 +1,10 @@
 package com.evereats.fooder.domain.repository;
 
 import com.evereats.fooder.domain.model.Restaurant;
-import org.springframework.stereotype.Component;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
+@Repository
+public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
-@Component
-public interface RestaurantRepository {
-    List<Restaurant> list();
-    Restaurant findById(Long id);
-    Restaurant save(Restaurant restaurant);
-    void delete(Long id);
 }

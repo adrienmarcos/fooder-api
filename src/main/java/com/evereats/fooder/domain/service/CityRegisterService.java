@@ -25,26 +25,21 @@ public class CityRegisterService {
     }
 
     public List<City> list() {
-        return cityRepository.list();
+        return cityRepository.findAll();
     }
 
     public City find(Long id) {
-        City city = cityRepository.findById(id);
-
-        if (city == null) {
-            throw new EntityNotFoundException(String.format("Não existe um registro de Cidade de código %d", id));
-        }
+        City city = cityRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format("Não existe um registro de Cidade de código %d", id)));
 
         return city;
     }
 
     public City save(City city) {
-        State state = stateRepository.findById(city.getState().getId());
-
-        if (state == null) {
-            throw new EntityNotFoundException(
-                    String.format("Não existe um registro de Estado de código %d", city.getState().getId()));
-        }
+        State state = stateRepository.findById(city.getState().getId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format("Não existe um registro de Estado de código %d", city.getState().getId())));
 
         city.setState(state);
         return cityRepository.save(city);
@@ -52,12 +47,9 @@ public class CityRegisterService {
 
     public City update(City city) {
         City currentCity = find(city.getId());
-        State state = stateRepository.findById(city.getState().getId());
-
-        if (state == null) {
-            throw new EntityNotFoundException(
-                    String.format("Não existe um registro de Estado de código %d", city.getState().getId()));
-        }
+        stateRepository.findById(city.getState().getId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format("Não existe um registro de Estado de código %d", city.getState().getId())));
 
         BeanUtils.copyProperties(city, currentCity);
         return cityRepository.save(currentCity);
@@ -65,7 +57,7 @@ public class CityRegisterService {
 
     public void delete(Long id) {
         try {
-            cityRepository.delete(id);
+            cityRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
             throw new EntityNotFoundException(String.format("Não existe um registro de Cidade de código %d", id));
         } catch (DataIntegrityViolationException e) {

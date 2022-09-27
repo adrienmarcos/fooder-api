@@ -30,15 +30,13 @@ public class RestaurantRegisterService {
     }
 
     public List<Restaurant> list() {
-        return restaurantRepository.list();
+        return restaurantRepository.findAll();
     }
 
     public Restaurant find(Long id) {
-        Restaurant restaurant = restaurantRepository.findById(id);
-
-        if (restaurant == null) {
-            throw new EntityNotFoundException(String.format("Não existe um registro de Restaurante de código %d", id));
-        }
+        Restaurant restaurant = restaurantRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format("Não existe um registro de Restaurante de código %d", id)));
 
         return restaurant;
     }
@@ -54,25 +52,18 @@ public class RestaurantRegisterService {
 
     public Restaurant update(Restaurant restaurant) {
         Restaurant currentRestaurant = find(restaurant.getId());
-        Optional<Kitchen> kitchen = kitchenRepository.findById(restaurant.getKitchen().getId());
-
-        if (kitchen.isEmpty()) {
-            throw new EntityNotFoundException(
-                    String.format("Não existe um registro de Cozinha de código %d", restaurant.getKitchen().getId()));
-        }
+        kitchenRepository.findById(restaurant.getKitchen().getId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format("Não existe um registro de Cozinha de código %d", restaurant.getKitchen().getId())));
 
         BeanUtils.copyProperties(restaurant, currentRestaurant);
         return restaurantRepository.save(currentRestaurant);
     }
 
     public Restaurant partialUpdate(Long id, Map<String, Object> fields) {
-        Restaurant restaurant = restaurantRepository.findById(id);
-
-        if (restaurant == null) {
-            throw new EntityNotFoundException(String.format("Não existe um registro de Restaurante de código", id));
-        }
-
+        Restaurant restaurant = find(id);
         merge(fields, restaurant);
+
         return update(restaurant);
     }
 
@@ -91,7 +82,7 @@ public class RestaurantRegisterService {
 
     public void delete(Long id) {
         try {
-            restaurantRepository.delete(id);
+            restaurantRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
             throw new EntityNotFoundException(String.format("Não existe um registro de Restaurante de código %d", id));
         } catch (DataIntegrityViolationException e) {

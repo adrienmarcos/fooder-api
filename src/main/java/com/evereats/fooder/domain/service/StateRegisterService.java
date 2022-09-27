@@ -21,15 +21,13 @@ public class StateRegisterService {
     }
 
     public List<State> list() {
-        return stateRepository.list();
+        return stateRepository.findAll();
     }
 
     public State find(Long id) {
-        State state = stateRepository.findById(id);
-
-        if (state == null) {
-            throw new EntityNotFoundException(String.format("Não existe um registro de Estado de código %d", id));
-        }
+        State state = stateRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format("Não existe um registro de Estado de código %d", id)));
 
         return state;
     }
@@ -46,7 +44,7 @@ public class StateRegisterService {
 
     public void delete(Long id) {
         try {
-            stateRepository.delete(id);
+            stateRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
             throw new EntityNotFoundException(String.format("Não existe um registro de Estado de código %d", id));
         } catch (DataIntegrityViolationException e) {
