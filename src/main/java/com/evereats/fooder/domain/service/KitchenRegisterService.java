@@ -53,4 +53,8 @@ public class KitchenRegisterService {
                     String.format("Cozinha de código %d não pode ser removida, pois está em uso", id));
         }
     }
+
+    public List<Kitchen> findByName(String name) {
+        return kitchenRepository.findByName(name);
+    }
 }

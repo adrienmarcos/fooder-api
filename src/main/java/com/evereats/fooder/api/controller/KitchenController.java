@@ -34,6 +34,11 @@ public class KitchenController {
         }
     }
 
+    @GetMapping("/byName")
+    public List<Kitchen> findByName(@RequestParam("name") String name) {
+        return kitchenRegisterService.findByName(name);
+    }
+
     @PostMapping
     public ResponseEntity<Kitchen> save(@RequestBody Kitchen kitchen) {
         return ResponseEntity.status(HttpStatus.CREATED).body(kitchenRegisterService.save(kitchen));
