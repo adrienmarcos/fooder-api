@@ -16,6 +16,7 @@ import org.springframework.util.ReflectionUtils;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class RestaurantRegisterService {
@@ -43,12 +44,9 @@ public class RestaurantRegisterService {
     }
 
     public Restaurant save(Restaurant restaurant) {
-        Kitchen kitchen = kitchenRepository.findById(restaurant.getKitchen().getId());
-
-        if (kitchen == null) {
-            throw new EntityNotFoundException(
-                    String.format("Não existe um registro de Cozinha de código %d", restaurant.getKitchen().getId()));
-        }
+        Kitchen kitchen = kitchenRepository.findById(restaurant.getKitchen().getId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format("Não existe um registro de Cozinha de código %d", restaurant.getKitchen().getId())));
 
         restaurant.setKitchen(kitchen);
         return restaurantRepository.save(restaurant);
@@ -56,9 +54,9 @@ public class RestaurantRegisterService {
 
     public Restaurant update(Restaurant restaurant) {
         Restaurant currentRestaurant = find(restaurant.getId());
-        Kitchen kitchen = kitchenRepository.findById(restaurant.getKitchen().getId());
+        Optional<Kitchen> kitchen = kitchenRepository.findById(restaurant.getKitchen().getId());
 
-        if (kitchen == null) {
+        if (kitchen.isEmpty()) {
             throw new EntityNotFoundException(
                     String.format("Não existe um registro de Cozinha de código %d", restaurant.getKitchen().getId()));
         }

@@ -9,8 +9,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class KitchenRegisterService {
@@ -22,15 +22,13 @@ public class KitchenRegisterService {
     }
 
     public List<Kitchen> list() {
-        return kitchenRepository.list();
+        return kitchenRepository.findAll();
     }
 
     public Kitchen find(Long id) {
-        Kitchen kitchen = kitchenRepository.findById(id);
-
-        if (kitchen == null) {
-            throw new EntityNotFoundException(String.format("Não existe um registro de Cozinha de código %d", id));
-        }
+        Kitchen kitchen = kitchenRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format("Não existe um registro de Cozinha de código %d", id)));
 
         return kitchen;
     }
@@ -47,7 +45,7 @@ public class KitchenRegisterService {
 
     public void delete(Long id) {
         try {
-            kitchenRepository.delete(id);
+            kitchenRepository.deleteById(id);
         } catch(EmptyResultDataAccessException e) {
             throw new EntityNotFoundException(String.format("Não existe um registro de Cozinha de código %d", id));
         } catch (DataIntegrityViolationException e) {
