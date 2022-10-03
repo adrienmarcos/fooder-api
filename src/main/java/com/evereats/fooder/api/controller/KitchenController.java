@@ -39,6 +39,11 @@ public class KitchenController {
         return kitchenRegisterService.findByName(name);
     }
 
+    @GetMapping("/exists")
+    public boolean exists(@RequestParam("name") String name) {
+        return kitchenRegisterService.exists(name);
+    }
+
     @PostMapping
     public ResponseEntity<Kitchen> save(@RequestBody Kitchen kitchen) {
         return ResponseEntity.status(HttpStatus.CREATED).body(kitchenRegisterService.save(kitchen));

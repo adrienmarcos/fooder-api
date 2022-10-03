@@ -8,8 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/restaurants")
@@ -33,6 +35,32 @@ public class RestaurantController {
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @GetMapping("/byFreightTax")
+    public List<Restaurant> findByFreightTax(@RequestParam("initialFreightTax") BigDecimal initialFreightTax,
+            @RequestParam("finalFreightTax") BigDecimal finalFreightTax) {
+        return restaurantRegisterService.findByFreightTax(initialFreightTax, finalFreightTax);
+    }
+
+    @GetMapping("/byNameAndKitchen")
+    public List<Restaurant> findByNameAndKitchen(@RequestParam("name") String name, @RequestParam("kitchenId") Long kitchenId) {
+        return restaurantRegisterService.findByNameAndKitchen(name, kitchenId);
+    }
+
+    @GetMapping("/firstByName")
+    public Optional<Restaurant> findFirstByName(@RequestParam("name") String name) {
+        return restaurantRegisterService.findFirstByName(name);
+    }
+
+    @GetMapping("/firstTwoByName")
+    public List<Restaurant> findFirstTwoByName(@RequestParam("name") String name) {
+        return restaurantRegisterService.findFistTwoByName(name);
+    }
+
+    @GetMapping("/countByKitchen")
+    public int countByKitchen(@RequestParam("kitchenId") Long kitchenId) {
+        return restaurantRegisterService.countByKitchen(kitchenId);
     }
 
     @PostMapping

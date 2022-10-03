@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -39,6 +40,26 @@ public class RestaurantRegisterService {
                         String.format("Não existe um registro de Restaurante de código %d", id)));
 
         return restaurant;
+    }
+
+    public List<Restaurant> findByFreightTax(BigDecimal initialFreightTax, BigDecimal finalFreightTax) {
+        return restaurantRepository.findByFreightTaxBetween(initialFreightTax, finalFreightTax);
+    }
+
+    public List<Restaurant> findByNameAndKitchen(String name, Long kitchenId) {
+        return restaurantRepository.findByNameContainingAndKitchenId(name, kitchenId);
+    }
+
+    public Optional<Restaurant> findFirstByName(String name) {
+        return restaurantRepository.findFirstByNameContaining(name);
+    }
+
+    public List<Restaurant> findFistTwoByName(String name) {
+        return restaurantRepository.findTop2ByNameContaining(name);
+    }
+
+    public int countByKitchen(Long kitchenId) {
+        return restaurantRepository.countByKitchenId(kitchenId);
     }
 
     public Restaurant save(Restaurant restaurant) {

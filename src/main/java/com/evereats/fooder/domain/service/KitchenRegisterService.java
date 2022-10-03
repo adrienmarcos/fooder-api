@@ -10,7 +10,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class KitchenRegisterService {
@@ -31,6 +30,10 @@ public class KitchenRegisterService {
                         String.format("Não existe um registro de Cozinha de código %d", id)));
 
         return kitchen;
+    }
+
+    public boolean exists(String name) {
+        return kitchenRepository.existsByName(name);
     }
 
     public Kitchen save(Kitchen kitchen) {
@@ -55,6 +58,6 @@ public class KitchenRegisterService {
     }
 
     public List<Kitchen> findByName(String name) {
-        return kitchenRepository.findByName(name);
+        return kitchenRepository.findByNameContaining(name);
     }
 }
