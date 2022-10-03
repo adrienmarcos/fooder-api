@@ -47,7 +47,7 @@ public class RestaurantRegisterService {
     }
 
     public List<Restaurant> findByNameAndKitchen(String name, Long kitchenId) {
-        return restaurantRepository.findByNameContainingAndKitchenId(name, kitchenId);
+        return restaurantRepository.findByNameAndKitchen(name, kitchenId);
     }
 
     public Optional<Restaurant> findFirstByName(String name) {
