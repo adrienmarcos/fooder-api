@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings
+    version="2.2"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/orm_2_2.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm">
+
+    <named-query name="Restaurant.findByNameAndKitchen">
+        <query>
+            FROM Restaurant r WHERE r.name LIKE concat('%', :name, '%') AND r.kitchen.id = :kitchenId
+        </query>
+    </named-query>
+</entity-mappings>

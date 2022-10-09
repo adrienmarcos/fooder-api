@@ -18,6 +18,6 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
     List<Restaurant> findTop2ByNameContaining(String name);
     int countByKitchenId(Long kitchenId);
 
-    @Query("FROM Restaurant r WHERE r.name LIKE %:name% AND r.kitchen.id = :kitchenId")
+    //@Query("FROM Restaurant r WHERE r.name LIKE %:name% AND r.kitchen.id = :kitchenId")
     List<Restaurant> findByNameAndKitchen(@Param("name") String name, @Param("kitchenId") Long kitchenId);
 }
