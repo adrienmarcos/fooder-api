@@ -63,6 +63,11 @@ public class RestaurantController {
         return restaurantRegisterService.countByKitchen(kitchenId);
     }
 
+    @GetMapping("/withFreeFreight")
+    public List<Restaurant> restaurantsWithFreeFreight(@RequestParam("name") String name) {
+        return restaurantRegisterService.restaurantsWithFreeFreight(name);
+    }
+
     @PostMapping
     public ResponseEntity<?> save(@RequestBody Restaurant restaurant) {
         try {
