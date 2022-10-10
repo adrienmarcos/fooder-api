@@ -68,6 +68,11 @@ public class RestaurantController {
         return restaurantRegisterService.restaurantsWithFreeFreight(name);
     }
 
+    @GetMapping("/first")
+    public Optional<Restaurant> findFirst() {
+        return restaurantRegisterService.findFirst();
+    }
+
     @PostMapping
     public ResponseEntity<?> save(@RequestBody Restaurant restaurant) {
         try {

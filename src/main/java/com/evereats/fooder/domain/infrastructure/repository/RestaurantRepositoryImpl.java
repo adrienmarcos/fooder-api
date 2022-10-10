@@ -1,7 +1,11 @@
 package com.evereats.fooder.domain.infrastructure.repository;
 
+import com.evereats.fooder.domain.infrastructure.repository.spec.RestaurantSpecs;
 import com.evereats.fooder.domain.model.Restaurant;
+import com.evereats.fooder.domain.repository.RestaurantRepository;
 import com.evereats.fooder.domain.repository.RestaurantRepositoryQueries;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -21,6 +25,9 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryQueries {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Autowired @Lazy
+    private RestaurantRepository restaurantRepository;
 
     @Override
     public List<Restaurant> find(String name, BigDecimal initialFreightTax, BigDecimal finalFreightTax) {
@@ -46,5 +53,10 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryQueries {
         TypedQuery<Restaurant> typedQuery =  entityManager.createQuery(criteriaQuery);
 
         return typedQuery.getResultList();
+    }
+
+    @Override
+    public List<Restaurant> findWithFreeFreight(String name) {
+        return restaurantRepository.findWithFreeFreight(name);
     }
 }

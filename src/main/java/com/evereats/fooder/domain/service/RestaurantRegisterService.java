@@ -116,4 +116,8 @@ public class RestaurantRegisterService {
     public List<Restaurant> restaurantsWithFreeFreight(String name) {
         return restaurantRepository.findAll(RestaurantSpecs.withFreeFreight().and(RestaurantSpecs.withSimilarName(name)));
     }
+
+    public Optional<Restaurant> findFirst() {
+        return restaurantRepository.findFirst();
+    }
 }
