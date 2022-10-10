@@ -8,8 +8,12 @@ import org.springframework.util.StringUtils;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -20,27 +24,27 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryQueries {
 
     @Override
     public List<Restaurant> find(String name, BigDecimal initialFreightTax, BigDecimal finalFreightTax) {
-        var parameters = new HashMap<String, Object>();
-        var jpql = new StringBuilder();
-        jpql.append("SELECT r FROM Restaurant r WHERE 0 = 0 ");
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Restaurant> criteriaQuery = criteriaBuilder.createQuery(Restaurant.class);
+        Root<Restaurant> root = criteriaQuery.from(Restaurant.class);
 
-        if (StringUtils.hasLength(name)) {
-            jpql.append("AND name LIKE :name ");
-            parameters.put("name", "%"+name+"%");
+        var predicates = new ArrayList<Predicate>();
+
+        if (StringUtils.hasText(name)) {
+            predicates.add(criteriaBuilder.like(root.get("name"), "%"+name+"%"));
         }
 
         if (initialFreightTax != null) {
-            jpql.append("AND freightTax >= :initialFreightTax ");
-            parameters.put("initialFreightTax", initialFreightTax);
+            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("freightTax"), initialFreightTax));
         }
+
         if (finalFreightTax != null) {
-            jpql.append("AND freightTax <= :finalFreightTax ");
-            parameters.put("finalFreightTax", finalFreightTax);
+            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("freightTax"), finalFreightTax));
         }
 
-        TypedQuery<Restaurant> query = entityManager.createQuery(jpql.toString(), Restaurant.class);
-        parameters.forEach((key, value) -> query.setParameter(key, value));
+        criteriaQuery.where(predicates.toArray(new Predicate[0]));
+        TypedQuery<Restaurant> typedQuery =  entityManager.createQuery(criteriaQuery);
 
-        return query.getResultList();
+        return typedQuery.getResultList();
     }
 }
