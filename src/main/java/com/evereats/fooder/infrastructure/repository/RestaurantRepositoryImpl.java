@@ -1,6 +1,5 @@
-package com.evereats.fooder.domain.infrastructure.repository;
+package com.evereats.fooder.infrastructure.repository;
 
-import com.evereats.fooder.domain.infrastructure.repository.spec.RestaurantSpecs;
 import com.evereats.fooder.domain.model.Restaurant;
 import com.evereats.fooder.domain.repository.RestaurantRepository;
 import com.evereats.fooder.domain.repository.RestaurantRepositoryQueries;

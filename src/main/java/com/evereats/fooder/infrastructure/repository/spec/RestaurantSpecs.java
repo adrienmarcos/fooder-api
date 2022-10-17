@@ -1,4 +1,4 @@
-package com.evereats.fooder.domain.infrastructure.repository.spec;
+package com.evereats.fooder.infrastructure.repository.spec;
 
 import com.evereats.fooder.domain.model.Restaurant;
 import org.springframework.data.jpa.domain.Specification;

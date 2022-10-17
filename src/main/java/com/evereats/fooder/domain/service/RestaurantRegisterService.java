@@ -2,7 +2,7 @@ package com.evereats.fooder.domain.service;
 
 import com.evereats.fooder.domain.exception.EntityInUseException;
 import com.evereats.fooder.domain.exception.EntityNotFoundException;
-import com.evereats.fooder.domain.infrastructure.repository.spec.RestaurantSpecs;
+import com.evereats.fooder.infrastructure.repository.spec.RestaurantSpecs;
 import com.evereats.fooder.domain.model.Kitchen;
 import com.evereats.fooder.domain.model.Restaurant;
 import com.evereats.fooder.domain.repository.KitchenRepository;
@@ -78,7 +78,7 @@ public class RestaurantRegisterService {
                 .orElseThrow(() -> new EntityNotFoundException(
                         String.format("Não existe um registro de Cozinha de código %d", restaurant.getKitchen().getId())));
 
-        BeanUtils.copyProperties(restaurant, currentRestaurant, "id", "paymentMethods");
+        BeanUtils.copyProperties(restaurant, currentRestaurant, "id", "paymentMethods", "address", "registerDate");
         return restaurantRepository.save(currentRestaurant);
     }
 

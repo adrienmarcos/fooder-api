@@ -1,4 +1,4 @@
-package com.evereats.fooder.domain.infrastructure.repository;
+package com.evereats.fooder.infrastructure.repository;
 
 import com.evereats.fooder.domain.repository.CustomJpaRepository;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
