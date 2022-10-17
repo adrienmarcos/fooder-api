@@ -20,9 +20,19 @@ INSERT INTO tb_payment_methods(id, description) VALUES(1, 'Cartão de crédito')
 INSERT INTO tb_payment_methods(id, description) VALUES(2, 'Cartão de débito');
 INSERT INTO tb_payment_methods(id, description) VALUES(3, 'Dinheiro');
 
-INSERT INTO tb_restaurant_payment_method(restaurant_id, payment_method_id) VALUES(1, 1);
-INSERT INTO tb_restaurant_payment_method(restaurant_id, payment_method_id) VALUES(1, 2);
-INSERT INTO tb_restaurant_payment_method(restaurant_id, payment_method_id) VALUES(1, 3);
-INSERT INTO tb_restaurant_payment_method(restaurant_id, payment_method_id) VALUES(2, 3);
-INSERT INTO tb_restaurant_payment_method(restaurant_id, payment_method_id) VALUES(3, 2);
-INSERT INTO tb_restaurant_payment_method(restaurant_id, payment_method_id) VALUES(3, 3);
+INSERT INTO tb_restaurants_payment_methods(restaurant_id, payment_method_id) VALUES(1, 1);
+INSERT INTO tb_restaurants_payment_methods(restaurant_id, payment_method_id) VALUES(1, 2);
+INSERT INTO tb_restaurants_payment_methods(restaurant_id, payment_method_id) VALUES(1, 3);
+INSERT INTO tb_restaurants_payment_methods(restaurant_id, payment_method_id) VALUES(2, 3);
+INSERT INTO tb_restaurants_payment_methods(restaurant_id, payment_method_id) VALUES(3, 2);
+INSERT INTO tb_restaurants_payment_methods(restaurant_id, payment_method_id) VALUES(3, 3);
+
+INSERT INTO tb_products(id, name, description, price, active, restaurant_id) VALUES(1, 'Sashimi', 'Salmão não cozido', 46.99, true, 3);
+INSERT INTO tb_products(id, name, description, price, active, restaurant_id) VALUES(2, 'Pão de pimenta', 'Pão levemente apimentado', 10.95, true, 2);
+INSERT INTO tb_products(id, name, description, price, active, restaurant_id) VALUES(3, 'Niguiri', 'Salmão não cozido com arroz', 20.99, true, 3);
+INSERT INTO tb_products(id, name, description, price, active, restaurant_id) VALUES(4, 'Macarrão a lá Tailand', 'Macarrão com shoyu', 80.99, true, 1);
+
+INSERT INTO tb_permissions(id, name, description) VALUES(1, 'Mensagens promocionais', 'Enviar mensagens promocionais aos clientes');
+INSERT INTO tb_permissions(id, name, description) VALUES(2, 'Dados sigilosos', 'Consultar dados sigilosos do cliente');
+INSERT INTO tb_permissions(id, name, description) VALUES(3, 'Nota fiscal', 'Emissão de nota fiscal');
+INSERT INTO tb_permissions(id, name, description) VALUES(4, 'Score', 'Consulta do score do cliente');
