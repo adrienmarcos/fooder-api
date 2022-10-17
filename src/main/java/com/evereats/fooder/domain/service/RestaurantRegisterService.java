@@ -78,7 +78,7 @@ public class RestaurantRegisterService {
                 .orElseThrow(() -> new EntityNotFoundException(
                         String.format("Não existe um registro de Cozinha de código %d", restaurant.getKitchen().getId())));
 
-        BeanUtils.copyProperties(restaurant, currentRestaurant);
+        BeanUtils.copyProperties(restaurant, currentRestaurant, "id", "paymentMethods");
         return restaurantRepository.save(currentRestaurant);
     }
 

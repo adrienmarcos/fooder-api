@@ -1,5 +1,6 @@
 package com.evereats.fooder.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -29,8 +30,11 @@ public class Restaurant {
     @JoinColumn(name = "kitchen_id", nullable = false)
     private Kitchen kitchen;
 
+    @JsonIgnore
     @ManyToMany
-    @JoinTable(name = "tb_restaurant_payment_method", joinColumns = @JoinColumn(name = "restaurant_id"),
+    @JoinTable(
+            name = "tb_restaurant_payment_method",
+            joinColumns = @JoinColumn(name = "restaurant_id"),
             inverseJoinColumns = @JoinColumn(name = "payment_method_id"))
     private List<PaymentMethod> paymentMethods = new ArrayList<>();
 }
