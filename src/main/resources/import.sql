@@ -36,3 +36,22 @@ INSERT INTO tb_permissions(id, name, description) VALUES(1, 'Mensagens promocion
 INSERT INTO tb_permissions(id, name, description) VALUES(2, 'Dados sigilosos', 'Consultar dados sigilosos do cliente');
 INSERT INTO tb_permissions(id, name, description) VALUES(3, 'Nota fiscal', 'Emissão de nota fiscal');
 INSERT INTO tb_permissions(id, name, description) VALUES(4, 'Score', 'Consulta do score do cliente');
+INSERT INTO tb_permissions(id, name, description) VALUES(5, 'Promoções', 'Visualizar promoções de restaurantes');
+
+INSERT INTO tb_groups(id, name) VALUES(1, 'Consumidores');
+INSERT INTO tb_groups(id, name) VALUES(2, 'Administradores');
+INSERT INTO tb_groups(id, name) VALUES(3, 'Fornecedores');
+
+INSERT INTO tb_groups_permissions(group_id, permission_id) VALUES(1, 5);
+INSERT INTO tb_groups_permissions(group_id, permission_id) VALUES(2, 2);
+INSERT INTO tb_groups_permissions(group_id, permission_id) VALUES(2, 4);
+INSERT INTO tb_groups_permissions(group_id, permission_id) VALUES(3, 1);
+INSERT INTO tb_groups_permissions(group_id, permission_id) VALUES(3, 3);
+
+INSERT INTO tb_users(id, name, mail, password, register_date) VALUES(1, 'Adrien Rossato', 'adrien.marcos@gmail.com', 'test_password', utc_timestamp);
+INSERT INTO tb_users(id, name, mail, password, register_date) VALUES(2, 'Samara Menezes', 'samara.menezes@gmail.com', 'test_password', utc_timestamp);
+INSERT INTO tb_users(id, name, mail, password, register_date) VALUES(3, 'Fulano de tal', 'fulano.tal@gmail.com', 'test_password', utc_timestamp);
+
+INSERT INTO tb_users_groups(user_id, group_id) VALUES(1, 2);
+INSERT INTO tb_users_groups(user_id, group_id) VALUES(2, 2);
+INSERT INTO tb_users_groups(user_id, group_id) VALUES(3, 1);
