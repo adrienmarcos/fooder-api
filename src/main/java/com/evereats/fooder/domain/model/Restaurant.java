@@ -1,6 +1,7 @@
 package com.evereats.fooder.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
@@ -48,7 +49,6 @@ public class Restaurant {
     @Column(name = "last_update_date", nullable = false, columnDefinition = "datetime")
     private LocalDateTime lastUpdateDate;
 
-    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "tb_restaurants_payment_methods",
             joinColumns = @JoinColumn(name = "restaurant_id"),
