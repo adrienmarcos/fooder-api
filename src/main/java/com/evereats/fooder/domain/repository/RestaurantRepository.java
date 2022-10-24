@@ -20,7 +20,7 @@ public interface RestaurantRepository extends CustomJpaRepository<Restaurant, Lo
     List<Restaurant> findTop2ByNameContaining(String name);
     int countByKitchenId(Long kitchenId);
 
-    @Query("SELECT r FROM Restaurant r JOIN FETCH r.kitchen LEFT JOIN FETCH r.paymentMethods")
+    @Query("SELECT r FROM Restaurant r JOIN FETCH r.kitchen")
     List<Restaurant> findAll();
 
     List<Restaurant> findByNameAndKitchen(@Param("name") String name, @Param("kitchenId") Long kitchenId);

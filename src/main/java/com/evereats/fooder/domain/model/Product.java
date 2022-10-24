@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 @Data
 @Entity
-@Table(name = "tb_products")
+@Table(name = "tb_product")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Product {
 

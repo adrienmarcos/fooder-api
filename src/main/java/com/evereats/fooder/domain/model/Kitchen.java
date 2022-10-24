@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @Entity
 @JsonRootName("kitchen")
-@Table(name = "tb_kitchens")
+@Table(name = "tb_kitchen")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Kitchen {
 

@@ -12,7 +12,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "tb_users")
+@Table(name = "tb_user")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User {
 
@@ -36,7 +36,7 @@ public class User {
 
     @JsonIgnore
     @ManyToMany
-    @JoinTable(name = "tb_users_groups",
+    @JoinTable(name = "tb_user_group",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id"))
     private List<Group> groups = new ArrayList<>();

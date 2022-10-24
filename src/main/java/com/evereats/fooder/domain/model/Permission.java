@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "tb_permissions")
+@Table(name = "tb_permission")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Permission {
 

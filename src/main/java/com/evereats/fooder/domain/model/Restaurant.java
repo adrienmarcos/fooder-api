@@ -16,7 +16,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "tb_restaurants")
+@Table(name = "tb_restaurant")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Restaurant {
 
@@ -49,8 +49,9 @@ public class Restaurant {
     @Column(name = "last_update_date", nullable = false, columnDefinition = "datetime")
     private LocalDateTime lastUpdateDate;
 
+    @JsonIgnore
     @ManyToMany
-    @JoinTable(name = "tb_restaurants_payment_methods",
+    @JoinTable(name = "tb_restaurant_payment_method",
             joinColumns = @JoinColumn(name = "restaurant_id"),
             inverseJoinColumns = @JoinColumn(name = "payment_method_id"))
     private List<PaymentMethod> paymentMethods = new ArrayList<>();

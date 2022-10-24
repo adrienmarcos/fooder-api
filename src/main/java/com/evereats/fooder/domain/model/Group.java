@@ -10,7 +10,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "tb_groups")
+@Table(name = "tb_group")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Group {
 
@@ -24,7 +24,7 @@ public class Group {
 
     @JsonIgnore
     @ManyToMany
-    @JoinTable(name = "tb_groups_permissions",
+    @JoinTable(name = "tb_group_permission",
             joinColumns = @JoinColumn(name = "group_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id"))
     private List<Permission> permissions = new ArrayList<>();

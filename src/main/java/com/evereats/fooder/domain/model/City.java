@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "tb_cities")
+@Table(name = "tb_city")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class City {
 

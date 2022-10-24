@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "tb_payment_methods")
+@Table(name = "tb_payment_method")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class PaymentMethod {
 
