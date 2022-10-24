@@ -1,0 +1,6 @@
+CREATE TABLE tb_kitchens (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(60) NOT NULL,
+
+    PRIMARY KEY(id)
+) engine=InnoDB DEFAULT CHARSET=utf8;
