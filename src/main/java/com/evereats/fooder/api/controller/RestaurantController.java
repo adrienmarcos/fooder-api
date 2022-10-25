@@ -1,10 +1,8 @@
 package com.evereats.fooder.api.controller;
 
-import com.evereats.fooder.domain.exception.EntityNotFoundException;
 import com.evereats.fooder.domain.model.Restaurant;
 import com.evereats.fooder.domain.service.RestaurantService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -23,17 +21,13 @@ public class RestaurantController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Restaurant>> list() {
-        return ResponseEntity.status(HttpStatus.OK).body(restaurantService.list());
+    public List<Restaurant> list() {
+        return restaurantService.list();
     }
 
     @GetMapping("/{restaurantId}")
-    public ResponseEntity<Restaurant> find(@PathVariable("restaurantId") Long id) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(restaurantService.find(id));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public Restaurant find(@PathVariable("restaurantId") Long id) {
+        return restaurantService.find(id);
     }
 
     @GetMapping("/byFreightTax")
@@ -43,7 +37,8 @@ public class RestaurantController {
     }
 
     @GetMapping("/byNameAndKitchen")
-    public List<Restaurant> findByNameAndKitchen(@RequestParam("name") String name, @RequestParam("kitchenId") Long kitchenId) {
+    public List<Restaurant> findByNameAndKitchen(@RequestParam("name") String name,
+            @RequestParam("kitchenId") Long kitchenId) {
         return restaurantService.findByNameAndKitchen(name, kitchenId);
     }
 
@@ -73,31 +68,20 @@ public class RestaurantController {
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody Restaurant restaurant) {
-        try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(restaurantService.save(restaurant));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+    @ResponseStatus(HttpStatus.CREATED)
+    public Restaurant save(@RequestBody Restaurant restaurant) {
+        return restaurantService.save(restaurant);
     }
 
     @PutMapping
-    public ResponseEntity<Restaurant> update(@RequestBody Restaurant restaurant) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(restaurantService.update(restaurant));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public Restaurant update(@RequestBody Restaurant restaurant) {
+        return restaurantService.update(restaurant);
     }
 
     @PatchMapping("/{restaurantId}")
-    public ResponseEntity<?> partialUpdate(@PathVariable("restaurantId") Long id,
+    public Restaurant partialUpdate(@PathVariable("restaurantId") Long id,
             @RequestBody Map<String, Object> fields) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(restaurantService.partialUpdate(id, fields));
-        } catch (Exception e) {
-            return null;
-        }
+        return restaurantService.partialUpdate(id, fields);
     }
 
     @DeleteMapping("/{restaurantId}")

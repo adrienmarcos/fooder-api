@@ -4,7 +4,6 @@ import com.evereats.fooder.domain.exception.EntityInUseException;
 import com.evereats.fooder.domain.exception.EntityNotFoundException;
 import com.evereats.fooder.domain.model.Kitchen;
 import com.evereats.fooder.domain.model.Restaurant;
-import com.evereats.fooder.domain.repository.KitchenRepository;
 import com.evereats.fooder.domain.repository.RestaurantRepository;
 import com.evereats.fooder.infrastructure.repository.spec.RestaurantSpecs;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,12 +22,14 @@ import java.util.Optional;
 @Service
 public class RestaurantService {
 
+    private static final String RESTAURANT_IN_USE = "Restaurante de código %d não pode ser removido, pois está em uso";
+    private static final String RESTAURANT_NOT_FOUND = "Não existe um registro de Restaurante de código %d";
     private final RestaurantRepository restaurantRepository;
-    private final KitchenRepository kitchenRepository;
+    private final KitchenService kitchenService;
 
-    public RestaurantService(RestaurantRepository restaurantRepository, KitchenRepository kitchenRepository) {
+    public RestaurantService(RestaurantRepository restaurantRepository, KitchenService kitchenService) {
         this.restaurantRepository = restaurantRepository;
-        this.kitchenRepository = kitchenRepository;
+        this.kitchenService = kitchenService;
     }
 
     public List<Restaurant> list() {
@@ -37,8 +38,7 @@ public class RestaurantService {
 
     public Restaurant find(Long id) {
         Restaurant restaurant = restaurantRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        String.format("Não existe um registro de Restaurante de código %d", id)));
+                .orElseThrow(() -> new EntityNotFoundException(String.format(RESTAURANT_NOT_FOUND, id)));
 
         return restaurant;
     }
@@ -64,21 +64,17 @@ public class RestaurantService {
     }
 
     public Restaurant save(Restaurant restaurant) {
-        Kitchen kitchen = kitchenRepository.findById(restaurant.getKitchen().getId())
-                .orElseThrow(() -> new EntityNotFoundException(
-                        String.format("Não existe um registro de Cozinha de código %d", restaurant.getKitchen().getId())));
-
+        Kitchen kitchen = kitchenService.find(restaurant.getKitchen().getId());
         restaurant.setKitchen(kitchen);
+
         return restaurantRepository.save(restaurant);
     }
 
     public Restaurant update(Restaurant restaurant) {
         Restaurant currentRestaurant = find(restaurant.getId());
-        kitchenRepository.findById(restaurant.getKitchen().getId())
-                .orElseThrow(() -> new EntityNotFoundException(
-                        String.format("Não existe um registro de Cozinha de código %d", restaurant.getKitchen().getId())));
-
+        restaurant.setKitchen(kitchenService.find(restaurant.getKitchen().getId()));
         BeanUtils.copyProperties(restaurant, currentRestaurant, "id", "paymentMethods", "address", "registerDate");
+
         return restaurantRepository.save(currentRestaurant);
     }
 
@@ -106,10 +102,9 @@ public class RestaurantService {
         try {
             restaurantRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new EntityNotFoundException(String.format("Não existe um registro de Restaurante de código %d", id));
+            throw new EntityNotFoundException(String.format(RESTAURANT_NOT_FOUND, id));
         } catch (DataIntegrityViolationException e) {
-            throw new EntityInUseException(
-                    String.format("Restaurante de código %d não pode ser removido, pois está em uso", id));
+            throw new EntityInUseException(String.format(RESTAURANT_IN_USE, id));
         }
     }
 
