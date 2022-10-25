@@ -1,10 +1,8 @@
 package com.evereats.fooder.api.controller;
 
-import com.evereats.fooder.domain.exception.EntityNotFoundException;
 import com.evereats.fooder.domain.model.City;
 import com.evereats.fooder.domain.service.CityService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,35 +18,24 @@ public class CityController {
     }
 
     @GetMapping
-    public ResponseEntity<List<City>> list() {
-        return ResponseEntity.status(HttpStatus.OK).body(cityService.list());
+    public List<City> list() {
+        return cityService.list();
     }
 
     @GetMapping("/{cityId}")
-    public ResponseEntity<City> find(@PathVariable("cityId") Long id) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(cityService.find(id));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public City find(@PathVariable("cityId") Long id) {
+        return cityService.find(id);
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody City city) {
-        try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(cityService.save(city));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+    @ResponseStatus(HttpStatus.CREATED)
+    public City save(@RequestBody City city) {
+        return cityService.save(city);
     }
 
     @PutMapping
-    public ResponseEntity<?> update(@RequestBody City city) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(cityService.update(city));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+    public City update(@RequestBody City city) {
+        return cityService.update(city);
     }
 
     @DeleteMapping("/{cityId}")
