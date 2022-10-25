@@ -20,31 +20,24 @@ public class StateController {
     }
 
     @GetMapping
-    public ResponseEntity<List<State>> list() {
-        return ResponseEntity.status(HttpStatus.OK).body(stateService.list());
+    public List<State> list() {
+        return stateService.list();
     }
 
     @GetMapping("/{stateId}")
-    public ResponseEntity<State> find(@PathVariable("stateId") Long id) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(stateService.find(id));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public State find(@PathVariable("stateId") Long id) {
+        return stateService.find(id);
     }
 
     @PostMapping
-    public ResponseEntity<State> save(@RequestBody State state) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(stateService.save(state));
+    @ResponseStatus(HttpStatus.CREATED)
+    public State save(@RequestBody State state) {
+        return stateService.save(state);
     }
 
     @PutMapping
-    public ResponseEntity<State> update(@RequestBody State state) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(stateService.update(state));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public State update(@RequestBody State state) {
+        return stateService.update(state);
     }
 
     @DeleteMapping("/{stateId}")
