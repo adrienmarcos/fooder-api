@@ -12,11 +12,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class KitchenRegisterService {
+public class KitchenService {
 
+    private static final String KITCHEN_NOT_FOUND = "Não existe um registro de Cozinha de código %d";
+    private static final String KITCHEN_IN_USE = "Cozinha de código %d não pode ser removida, pois está em uso";
     private final KitchenRepository kitchenRepository;
 
-    public KitchenRegisterService(KitchenRepository kitchenRepository) {
+    public KitchenService(KitchenRepository kitchenRepository) {
         this.kitchenRepository = kitchenRepository;
     }
 
@@ -25,11 +27,8 @@ public class KitchenRegisterService {
     }
 
     public Kitchen find(Long id) {
-        Kitchen kitchen = kitchenRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        String.format("Não existe um registro de Cozinha de código %d", id)));
-
-        return kitchen;
+        return kitchenRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format(KITCHEN_NOT_FOUND, id)));
     }
 
     public boolean exists(String name) {
@@ -50,9 +49,9 @@ public class KitchenRegisterService {
         try {
             kitchenRepository.deleteById(id);
         } catch(EmptyResultDataAccessException e) {
-            throw new EntityNotFoundException(String.format("Não existe um registro de Cozinha de código %d", id));
+            throw new EntityNotFoundException(String.format(KITCHEN_NOT_FOUND, id));
         } catch (DataIntegrityViolationException e) {
-            throw new EntityInUseException(String.format("Cozinha de código %d não pode ser removida, pois está em uso", id));
+            throw new EntityInUseException(String.format(KITCHEN_IN_USE, id));
         }
     }
 

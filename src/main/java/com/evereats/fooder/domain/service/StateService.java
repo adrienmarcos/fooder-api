@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class StateRegisterService {
+public class StateService {
 
     private final StateRepository stateRepository;
 
-    public StateRegisterService(StateRepository stateRepository) {
+    public StateService(StateRepository stateRepository) {
         this.stateRepository = stateRepository;
     }
 

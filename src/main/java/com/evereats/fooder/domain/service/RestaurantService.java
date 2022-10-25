@@ -21,12 +21,12 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class RestaurantRegisterService {
+public class RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
     private final KitchenRepository kitchenRepository;
 
-    public RestaurantRegisterService(RestaurantRepository restaurantRepository, KitchenRepository kitchenRepository) {
+    public RestaurantService(RestaurantRepository restaurantRepository, KitchenRepository kitchenRepository) {
         this.restaurantRepository = restaurantRepository;
         this.kitchenRepository = kitchenRepository;
     }

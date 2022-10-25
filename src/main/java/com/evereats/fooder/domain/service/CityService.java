@@ -14,12 +14,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CityRegisterService {
+public class CityService {
 
     private final CityRepository cityRepository;
     private final StateRepository stateRepository;
 
-    public CityRegisterService(CityRepository cityRepository, StateRepository stateRepository) {
+    public CityService(CityRepository cityRepository, StateRepository stateRepository) {
         this.cityRepository = cityRepository;
         this.stateRepository = stateRepository;
     }
