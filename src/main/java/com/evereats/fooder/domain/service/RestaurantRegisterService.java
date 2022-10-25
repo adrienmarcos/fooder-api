@@ -2,11 +2,11 @@ package com.evereats.fooder.domain.service;
 
 import com.evereats.fooder.domain.exception.EntityInUseException;
 import com.evereats.fooder.domain.exception.EntityNotFoundException;
-import com.evereats.fooder.infrastructure.repository.spec.RestaurantSpecs;
 import com.evereats.fooder.domain.model.Kitchen;
 import com.evereats.fooder.domain.model.Restaurant;
 import com.evereats.fooder.domain.repository.KitchenRepository;
 import com.evereats.fooder.domain.repository.RestaurantRepository;
+import com.evereats.fooder.infrastructure.repository.spec.RestaurantSpecs;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -23,8 +23,8 @@ import java.util.Optional;
 @Service
 public class RestaurantRegisterService {
 
-    private RestaurantRepository restaurantRepository;
-    private KitchenRepository kitchenRepository;
+    private final RestaurantRepository restaurantRepository;
+    private final KitchenRepository kitchenRepository;
 
     public RestaurantRegisterService(RestaurantRepository restaurantRepository, KitchenRepository kitchenRepository) {
         this.restaurantRepository = restaurantRepository;

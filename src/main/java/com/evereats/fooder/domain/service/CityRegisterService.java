@@ -16,8 +16,8 @@ import java.util.List;
 @Service
 public class CityRegisterService {
 
-    private CityRepository cityRepository;
-    private StateRepository stateRepository;
+    private final CityRepository cityRepository;
+    private final StateRepository stateRepository;
 
     public CityRegisterService(CityRepository cityRepository, StateRepository stateRepository) {
         this.cityRepository = cityRepository;

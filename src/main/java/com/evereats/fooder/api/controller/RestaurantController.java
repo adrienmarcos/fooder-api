@@ -17,7 +17,7 @@ import java.util.Optional;
 @RequestMapping("/restaurants")
 public class RestaurantController {
 
-    private RestaurantRegisterService restaurantRegisterService;
+    private final RestaurantRegisterService restaurantRegisterService;
 
     public RestaurantController(RestaurantRegisterService restaurantRegisterService) {
         this.restaurantRegisterService = restaurantRegisterService;

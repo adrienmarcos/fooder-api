@@ -1,6 +1,5 @@
 package com.evereats.fooder.api.controller;
 
-import com.evereats.fooder.domain.exception.EntityInUseException;
 import com.evereats.fooder.domain.exception.EntityNotFoundException;
 import com.evereats.fooder.domain.model.Kitchen;
 import com.evereats.fooder.domain.service.KitchenRegisterService;
@@ -14,7 +13,7 @@ import java.util.List;
 @RequestMapping("/kitchens")
 public class KitchenController {
 
-    private KitchenRegisterService kitchenRegisterService;
+    private final KitchenRegisterService kitchenRegisterService;
 
     public KitchenController(KitchenRegisterService kitchenRegisterService) {
         this.kitchenRegisterService = kitchenRegisterService;
@@ -59,14 +58,8 @@ public class KitchenController {
     }
 
     @DeleteMapping("/{kitchenId}")
-    public ResponseEntity<Kitchen> delete(@PathVariable("kitchenId") Long id) {
-        try {
-            kitchenRegisterService.delete(id);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } catch (EntityInUseException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable("kitchenId") Long id) {
+        kitchenRegisterService.delete(id);
     }
 }

@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 public class StateRegisterService {
 
-    private StateRepository stateRepository;
+    private final StateRepository stateRepository;
 
     public StateRegisterService(StateRepository stateRepository) {
         this.stateRepository = stateRepository;

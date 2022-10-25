@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 public class KitchenRegisterService {
 
-    private KitchenRepository kitchenRepository;
+    private final KitchenRepository kitchenRepository;
 
     public KitchenRegisterService(KitchenRepository kitchenRepository) {
         this.kitchenRepository = kitchenRepository;
@@ -52,8 +52,7 @@ public class KitchenRegisterService {
         } catch(EmptyResultDataAccessException e) {
             throw new EntityNotFoundException(String.format("Não existe um registro de Cozinha de código %d", id));
         } catch (DataIntegrityViolationException e) {
-            throw new EntityInUseException(
-                    String.format("Cozinha de código %d não pode ser removida, pois está em uso", id));
+            throw new EntityInUseException(String.format("Cozinha de código %d não pode ser removida, pois está em uso", id));
         }
     }
 

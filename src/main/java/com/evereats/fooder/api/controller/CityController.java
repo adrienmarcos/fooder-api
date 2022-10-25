@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/cities")
 public class CityController {
 
-    private CityRegisterService cityRegisterService;
+    private final CityRegisterService cityRegisterService;
 
     public CityController(CityRegisterService cityRegisterService) {
         this.cityRegisterService = cityRegisterService;
@@ -53,14 +53,8 @@ public class CityController {
     }
 
     @DeleteMapping("/{cityId}")
-    public ResponseEntity<City> delete(@PathVariable("cityId") Long id) {
-        try {
-            cityRegisterService.delete(id);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        } catch (EntityInUseException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable("cityId") Long id) {
+        cityRegisterService.delete(id);
     }
 }

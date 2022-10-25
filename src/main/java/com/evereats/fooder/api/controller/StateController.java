@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/states")
 public class StateController {
 
-    private StateRegisterService stateRegisterService;
+    private final StateRegisterService stateRegisterService;
 
     public StateController(StateRegisterService stateRegisterService) {
         this.stateRegisterService = stateRegisterService;
