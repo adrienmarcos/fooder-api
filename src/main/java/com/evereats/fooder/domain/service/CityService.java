@@ -3,7 +3,6 @@ package com.evereats.fooder.domain.service;
 import com.evereats.fooder.domain.exception.EntityInUseException;
 import com.evereats.fooder.domain.exception.EntityNotFoundException;
 import com.evereats.fooder.domain.model.City;
-import com.evereats.fooder.domain.model.State;
 import com.evereats.fooder.domain.repository.CityRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -37,16 +36,14 @@ public class CityService {
     }
 
     public City save(City city) {
-        State state = stateService.find(city.getState().getId());
-        city.setState(state);
-
+        city.setState(stateService.find(city.getState().getId()));
         return cityRepository.save(city);
     }
 
-    public City update(City city) {
-        City currentCity = find(city.getId());
+    public City update(Long cityID, City city) {
+        City currentCity = find(cityID);
         city.setState(stateService.find(city.getState().getId()));
-        BeanUtils.copyProperties(city, currentCity);
+        BeanUtils.copyProperties(city, currentCity, "id");
 
         return cityRepository.save(currentCity);
     }

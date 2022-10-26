@@ -43,9 +43,9 @@ public class KitchenController {
         return kitchenService.save(kitchen);
     }
 
-    @PutMapping
-    public Kitchen update(@RequestBody Kitchen kitchen) {
-        return kitchenService.update(kitchen);
+    @PutMapping("/{kitchenID}")
+    public Kitchen update(@PathVariable(name = "kitchenID") long kitchenID, @RequestBody Kitchen kitchen) {
+        return kitchenService.update(kitchenID, kitchen);
     }
 
     @DeleteMapping("/{kitchenId}")

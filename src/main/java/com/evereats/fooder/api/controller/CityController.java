@@ -1,5 +1,8 @@
 package com.evereats.fooder.api.controller;
 
+import com.evereats.fooder.domain.exception.DomainException;
+import com.evereats.fooder.domain.exception.EntityNotFoundException;
+import com.evereats.fooder.domain.exception.StateNotFoundException;
 import com.evereats.fooder.domain.model.City;
 import com.evereats.fooder.domain.service.CityService;
 import org.springframework.http.HttpStatus;
@@ -30,12 +33,20 @@ public class CityController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public City save(@RequestBody City city) {
-        return cityService.save(city);
+        try {
+            return cityService.save(city);
+        } catch(StateNotFoundException e) {
+            throw new DomainException(e.getMessage());
+        }
     }
 
-    @PutMapping
-    public City update(@RequestBody City city) {
-        return cityService.update(city);
+    @PutMapping("/{cityID}")
+    public City update(@PathVariable(name = "cityID") Long cityID, @RequestBody City city) {
+        try {
+            return cityService.update(cityID, city);
+        } catch(StateNotFoundException e) {
+            throw new DomainException(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{cityId}")

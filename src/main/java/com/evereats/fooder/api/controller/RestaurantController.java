@@ -1,5 +1,7 @@
 package com.evereats.fooder.api.controller;
 
+import com.evereats.fooder.domain.exception.DomainException;
+import com.evereats.fooder.domain.exception.EntityNotFoundException;
 import com.evereats.fooder.domain.model.Restaurant;
 import com.evereats.fooder.domain.service.RestaurantService;
 import org.springframework.http.HttpStatus;
@@ -70,18 +72,30 @@ public class RestaurantController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Restaurant save(@RequestBody Restaurant restaurant) {
-        return restaurantService.save(restaurant);
+        try {
+            return restaurantService.save(restaurant);
+        } catch(EntityNotFoundException e) {
+            throw new DomainException(e.getMessage());
+        }
     }
 
-    @PutMapping
-    public Restaurant update(@RequestBody Restaurant restaurant) {
-        return restaurantService.update(restaurant);
+    @PutMapping("/{restaurantID}")
+    public Restaurant update(@PathVariable(name = "restaurantID") long restaurantID, @RequestBody Restaurant restaurant) {
+        try {
+            return restaurantService.update(restaurantID, restaurant);
+        } catch(EntityNotFoundException e) {
+            throw new DomainException(e.getMessage());
+        }
     }
 
-    @PatchMapping("/{restaurantId}")
-    public Restaurant partialUpdate(@PathVariable("restaurantId") Long id,
+    @PatchMapping("/{restaurantID}")
+    public Restaurant partialUpdate(@PathVariable("restaurantID") Long restaurantID,
             @RequestBody Map<String, Object> fields) {
-        return restaurantService.partialUpdate(id, fields);
+        try {
+            return restaurantService.partialUpdate(restaurantID, fields);
+        } catch(EntityNotFoundException e) {
+            throw new DomainException(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{restaurantId}")

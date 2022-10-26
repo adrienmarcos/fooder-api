@@ -33,9 +33,9 @@ public class StateController {
         return stateService.save(state);
     }
 
-    @PutMapping
-    public State update(@RequestBody State state) {
-        return stateService.update(state);
+    @PutMapping("/{stateID}")
+    public State update(@PathVariable(name = "stateID") long stateID, @RequestBody State state) {
+        return stateService.update(stateID, state);
     }
 
     @DeleteMapping("/{stateId}")

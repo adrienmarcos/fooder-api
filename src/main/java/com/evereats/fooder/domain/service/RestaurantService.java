@@ -64,25 +64,23 @@ public class RestaurantService {
     }
 
     public Restaurant save(Restaurant restaurant) {
-        Kitchen kitchen = kitchenService.find(restaurant.getKitchen().getId());
-        restaurant.setKitchen(kitchen);
-
+        restaurant.setKitchen(kitchenService.find(restaurant.getKitchen().getId()));
         return restaurantRepository.save(restaurant);
     }
 
-    public Restaurant update(Restaurant restaurant) {
-        Restaurant currentRestaurant = find(restaurant.getId());
+    public Restaurant update(long restaurantID, Restaurant restaurant) {
+        Restaurant currentRestaurant = find(restaurantID);
         restaurant.setKitchen(kitchenService.find(restaurant.getKitchen().getId()));
         BeanUtils.copyProperties(restaurant, currentRestaurant, "id", "paymentMethods", "address", "registerDate");
 
         return restaurantRepository.save(currentRestaurant);
     }
 
-    public Restaurant partialUpdate(Long id, Map<String, Object> fields) {
-        Restaurant restaurant = find(id);
+    public Restaurant partialUpdate(Long restaurantID, Map<String, Object> fields) {
+        Restaurant restaurant = find(restaurantID);
         merge(fields, restaurant);
 
-        return update(restaurant);
+        return update(restaurantID, restaurant);
     }
 
     private void merge(Map<String, Object> fields, Restaurant destiny) {

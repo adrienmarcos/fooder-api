@@ -1,7 +1,7 @@
 package com.evereats.fooder.domain.service;
 
 import com.evereats.fooder.domain.exception.EntityInUseException;
-import com.evereats.fooder.domain.exception.EntityNotFoundException;
+import com.evereats.fooder.domain.exception.StateNotFoundException;
 import com.evereats.fooder.domain.model.State;
 import com.evereats.fooder.domain.repository.StateRepository;
 import org.springframework.beans.BeanUtils;
@@ -28,7 +28,7 @@ public class StateService {
 
     public State find(Long id) {
         State state = stateRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(String.format(STATE_NOT_FOUND, id)));
+                .orElseThrow(() -> new StateNotFoundException(String.format(STATE_NOT_FOUND, id)));
 
         return state;
     }
@@ -37,8 +37,8 @@ public class StateService {
         return stateRepository.save(state);
     }
 
-    public State update(State state) {
-        State currentState = find(state.getId());
+    public State update(long stateID, State state) {
+        State currentState = find(stateID);
         BeanUtils.copyProperties(state, currentState);
         return stateRepository.save(currentState);
     }
@@ -47,7 +47,7 @@ public class StateService {
         try {
             stateRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new EntityNotFoundException(String.format(STATE_NOT_FOUND, id));
+            throw new StateNotFoundException(String.format(STATE_NOT_FOUND, id));
         } catch (DataIntegrityViolationException e) {
             throw new EntityInUseException(String.format(STATE_IN_USE, id));
         }
