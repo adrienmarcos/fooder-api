@@ -16,37 +16,19 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<?> handleEntityNotFoundException(EntityNotFoundException ex, WebRequest request) {
-        var apiError = ApiError.builder()
-                .status(HttpStatus.NOT_FOUND.value())
-                .type("https://fooder.com.br/entity-not-found")
-                .title("Entity not found")
-                .detail(ex.getMessage())
-                .build();
-
+        var apiError = createApiErrorBuilder(HttpStatus.NOT_FOUND, ApiErrorType.ENTITY_NOT_FOUND, ex.getMessage()).build();
         return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler(DomainException.class)
     public ResponseEntity<?> handleDomainException(DomainException ex, WebRequest request) {
-        var apiError = ApiError.builder()
-                .status(HttpStatus.BAD_REQUEST.value())
-                .type("https://fooder.com.br/domain")
-                .title("Domain error")
-                .detail(ex.getMessage())
-                .build();
-
+        var apiError = createApiErrorBuilder(HttpStatus.BAD_REQUEST, ApiErrorType.DOMAIN_ERROR, ex.getMessage()).build();
         return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler(EntityInUseException.class)
     public ResponseEntity<?> handleEntityInUseException(EntityInUseException ex, WebRequest request) {
-        var apiError = ApiError.builder()
-                .status(HttpStatus.CONFLICT.value())
-                .type("https://fooder.com.br/entity-in-use")
-                .title("Entity in use")
-                .detail(ex.getMessage())
-                .build();
-
+        var apiError = createApiErrorBuilder(HttpStatus.CONFLICT, ApiErrorType.ENTITY_IN_USE, ex.getMessage()).build();
         return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
@@ -61,5 +43,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         }
 
         return super.handleExceptionInternal(ex, body, headers, status, request);
+    }
+
+    private ApiError.ApiErrorBuilder createApiErrorBuilder(HttpStatus status, ApiErrorType apiErrorType, String detail) {
+        return ApiError.builder()
+                .status(status.value())
+                .type(apiErrorType.getUri())
+                .title(apiErrorType.getTitle())
+                .detail(detail);
     }
 }
