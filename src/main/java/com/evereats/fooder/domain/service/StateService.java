@@ -15,7 +15,6 @@ import java.util.List;
 public class StateService {
 
     private static final String STATE_IN_USE = "Estado de código %d não pode ser removido pois está em uso";
-    private static final String STATE_NOT_FOUND = "Não existe um registro de Estado de código %d";
     private final StateRepository stateRepository;
 
     public StateService(StateRepository stateRepository) {
@@ -27,9 +26,7 @@ public class StateService {
     }
 
     public State find(Long id) {
-        State state = stateRepository.findById(id)
-                .orElseThrow(() -> new StateNotFoundException(String.format(STATE_NOT_FOUND, id)));
-
+        State state = stateRepository.findById(id).orElseThrow(() -> new StateNotFoundException(id));
         return state;
     }
 
@@ -47,7 +44,7 @@ public class StateService {
         try {
             stateRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new StateNotFoundException(String.format(STATE_NOT_FOUND, id));
+            throw new StateNotFoundException(id);
         } catch (DataIntegrityViolationException e) {
             throw new EntityInUseException(String.format(STATE_IN_USE, id));
         }

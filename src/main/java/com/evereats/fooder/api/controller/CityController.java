@@ -1,7 +1,6 @@
 package com.evereats.fooder.api.controller;
 
 import com.evereats.fooder.domain.exception.DomainException;
-import com.evereats.fooder.domain.exception.EntityNotFoundException;
 import com.evereats.fooder.domain.exception.StateNotFoundException;
 import com.evereats.fooder.domain.model.City;
 import com.evereats.fooder.domain.service.CityService;
@@ -36,7 +35,7 @@ public class CityController {
         try {
             return cityService.save(city);
         } catch(StateNotFoundException e) {
-            throw new DomainException(e.getMessage());
+            throw new DomainException(e.getMessage(), e);
         }
     }
 
@@ -45,7 +44,7 @@ public class CityController {
         try {
             return cityService.update(cityID, city);
         } catch(StateNotFoundException e) {
-            throw new DomainException(e.getMessage());
+            throw new DomainException(e.getMessage(), e);
         }
     }
 

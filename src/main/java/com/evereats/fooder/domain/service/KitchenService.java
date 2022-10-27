@@ -15,7 +15,6 @@ import java.util.List;
 @Service
 public class KitchenService {
 
-    private static final String KITCHEN_NOT_FOUND = "Não existe um registro de Cozinha de código %d";
     private static final String KITCHEN_IN_USE = "Cozinha de código %d não pode ser removida, pois está em uso";
     private final KitchenRepository kitchenRepository;
 
@@ -28,8 +27,7 @@ public class KitchenService {
     }
 
     public Kitchen find(Long id) {
-        return kitchenRepository.findById(id)
-                .orElseThrow(() -> new KitchenNotFoundException(String.format(KITCHEN_NOT_FOUND, id)));
+        return kitchenRepository.findById(id).orElseThrow(() -> new KitchenNotFoundException(id));
     }
 
     public boolean exists(String name) {
@@ -50,7 +48,7 @@ public class KitchenService {
         try {
             kitchenRepository.deleteById(id);
         } catch(EmptyResultDataAccessException e) {
-            throw new EntityNotFoundException(String.format(KITCHEN_NOT_FOUND, id));
+            throw new KitchenNotFoundException(id);
         } catch (DataIntegrityViolationException e) {
             throw new EntityInUseException(String.format(KITCHEN_IN_USE, id));
         }

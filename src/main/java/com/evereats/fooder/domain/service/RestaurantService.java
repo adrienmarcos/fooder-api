@@ -1,7 +1,7 @@
 package com.evereats.fooder.domain.service;
 
 import com.evereats.fooder.domain.exception.EntityInUseException;
-import com.evereats.fooder.domain.exception.EntityNotFoundException;
+import com.evereats.fooder.domain.exception.RestaurantNotFoundException;
 import com.evereats.fooder.domain.model.Restaurant;
 import com.evereats.fooder.domain.repository.RestaurantRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,7 +21,6 @@ import java.util.Optional;
 public class RestaurantService {
 
     private static final String RESTAURANT_IN_USE = "Restaurante de código %d não pode ser removido, pois está em uso";
-    private static final String RESTAURANT_NOT_FOUND = "Não existe um registro de Restaurante de código %d";
     private final RestaurantRepository restaurantRepository;
     private final KitchenService kitchenService;
 
@@ -35,9 +34,7 @@ public class RestaurantService {
     }
 
     public Restaurant find(Long id) {
-        Restaurant restaurant = restaurantRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(String.format(RESTAURANT_NOT_FOUND, id)));
-
+        Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new RestaurantNotFoundException(id));
         return restaurant;
     }
 
@@ -98,7 +95,7 @@ public class RestaurantService {
         try {
             restaurantRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new EntityNotFoundException(String.format(RESTAURANT_NOT_FOUND, id));
+            throw new RestaurantNotFoundException(id);
         } catch (DataIntegrityViolationException e) {
             throw new EntityInUseException(String.format(RESTAURANT_IN_USE, id));
         }
