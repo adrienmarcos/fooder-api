@@ -2,7 +2,6 @@ package com.evereats.fooder.domain.service;
 
 import com.evereats.fooder.domain.exception.CityNotFoundException;
 import com.evereats.fooder.domain.exception.EntityInUseException;
-import com.evereats.fooder.domain.exception.EntityNotFoundException;
 import com.evereats.fooder.domain.model.City;
 import com.evereats.fooder.domain.repository.CityRepository;
 import org.springframework.beans.BeanUtils;
