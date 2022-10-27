@@ -57,16 +57,4 @@ public class CityController {
     public void delete(@PathVariable("cityId") Long id) {
         cityService.delete(id);
     }
-
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<?> handleEntityNotFoundException(EntityNotFoundException e) {
-        var apiError = ApiError.builder().dateTime(LocalDateTime.now()).message(e.getMessage()).build();
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiError);
-    }
-
-    @ExceptionHandler(DomainException.class)
-    public ResponseEntity<?> handleDomainException(DomainException e) {
-        var apiError = ApiError.builder().dateTime(LocalDateTime.now()).message(e.getMessage()).build();
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
-    }
 }
