@@ -1,16 +1,12 @@
 package com.evereats.fooder.api.controller;
 
-import com.evereats.fooder.api.exceptionHandler.ApiError;
 import com.evereats.fooder.domain.exception.DomainException;
-import com.evereats.fooder.domain.exception.EntityNotFoundException;
 import com.evereats.fooder.domain.exception.StateNotFoundException;
 import com.evereats.fooder.domain.model.City;
 import com.evereats.fooder.domain.service.CityService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
