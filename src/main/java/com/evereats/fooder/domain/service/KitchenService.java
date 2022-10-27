@@ -2,6 +2,7 @@ package com.evereats.fooder.domain.service;
 
 import com.evereats.fooder.domain.exception.EntityInUseException;
 import com.evereats.fooder.domain.exception.EntityNotFoundException;
+import com.evereats.fooder.domain.exception.KitchenNotFoundException;
 import com.evereats.fooder.domain.model.Kitchen;
 import com.evereats.fooder.domain.repository.KitchenRepository;
 import org.springframework.beans.BeanUtils;
@@ -28,7 +29,7 @@ public class KitchenService {
 
     public Kitchen find(Long id) {
         return kitchenRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(String.format(KITCHEN_NOT_FOUND, id)));
+                .orElseThrow(() -> new KitchenNotFoundException(String.format(KITCHEN_NOT_FOUND, id)));
     }
 
     public boolean exists(String name) {

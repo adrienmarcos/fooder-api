@@ -2,6 +2,7 @@ package com.evereats.fooder.api.controller;
 
 import com.evereats.fooder.domain.exception.DomainException;
 import com.evereats.fooder.domain.exception.EntityNotFoundException;
+import com.evereats.fooder.domain.exception.KitchenNotFoundException;
 import com.evereats.fooder.domain.model.Restaurant;
 import com.evereats.fooder.domain.service.RestaurantService;
 import org.springframework.http.HttpStatus;
@@ -59,22 +60,12 @@ public class RestaurantController {
         return restaurantService.countByKitchen(kitchenId);
     }
 
-    @GetMapping("/withFreeFreight")
-    public List<Restaurant> restaurantsWithFreeFreight(@RequestParam("name") String name) {
-        return restaurantService.restaurantsWithFreeFreight(name);
-    }
-
-    @GetMapping("/first")
-    public Optional<Restaurant> findFirst() {
-        return restaurantService.findFirst();
-    }
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Restaurant save(@RequestBody Restaurant restaurant) {
         try {
             return restaurantService.save(restaurant);
-        } catch(EntityNotFoundException e) {
+        } catch(KitchenNotFoundException e) {
             throw new DomainException(e.getMessage());
         }
     }
@@ -83,7 +74,7 @@ public class RestaurantController {
     public Restaurant update(@PathVariable(name = "restaurantID") long restaurantID, @RequestBody Restaurant restaurant) {
         try {
             return restaurantService.update(restaurantID, restaurant);
-        } catch(EntityNotFoundException e) {
+        } catch(KitchenNotFoundException e) {
             throw new DomainException(e.getMessage());
         }
     }
