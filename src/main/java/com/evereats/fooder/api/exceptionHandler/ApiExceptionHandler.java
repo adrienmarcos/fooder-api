@@ -3,13 +3,18 @@ package com.evereats.fooder.api.exceptionHandler;
 import com.evereats.fooder.domain.exception.DomainException;
 import com.evereats.fooder.domain.exception.EntityInUseException;
 import com.evereats.fooder.domain.exception.EntityNotFoundException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -33,6 +38,20 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(
+            HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+        if (ExceptionUtils.getRootCause(ex) instanceof InvalidFormatException) {
+            return handleInvalidFormatException((InvalidFormatException) ExceptionUtils.getRootCause(ex), headers, status, request);
+        }
+
+        var apiError = createApiErrorBuilder(HttpStatus.BAD_REQUEST, ApiErrorType.MESSAGE_NOT_READABLE,
+                "The request's body it's not valid. Check syntax error.").build();
+
+        return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
+    @Override
     protected ResponseEntity<Object> handleExceptionInternal(
             Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
@@ -51,5 +70,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .type(apiErrorType.getUri())
                 .title(apiErrorType.getTitle())
                 .detail(detail);
+    }
+
+    private ResponseEntity<Object> handleInvalidFormatException(
+            InvalidFormatException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+        var path = ex.getPath().stream()
+                .map(reference -> reference.getFieldName())
+                .collect(Collectors.joining("."));
+
+        var apiError = createApiErrorBuilder(status, ApiErrorType.MESSAGE_NOT_READABLE,
+                String.format("The property '%s' received the value '%s' who is a invalid type. Fix it and enter a " +
+                        "value compatible with the type %s", path, ex.getValue(), ex.getTargetType().getSimpleName())).build();
+        return handleExceptionInternal(ex, apiError, headers, status, request);
     }
 }

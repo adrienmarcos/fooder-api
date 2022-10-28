@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum ApiErrorType {
+    MESSAGE_NOT_READABLE("/message-not-readable", "Message not readable"),
     ENTITY_NOT_FOUND("/entity-not-found", "Entity not found"),
     ENTITY_IN_USE("/entity-in-use", "Entity in use"),
     DOMAIN_ERROR("/domain-error", "Domain error");
