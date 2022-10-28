@@ -4,13 +4,18 @@ import com.evereats.fooder.domain.exception.EntityInUseException;
 import com.evereats.fooder.domain.exception.RestaurantNotFoundException;
 import com.evereats.fooder.domain.model.Restaurant;
 import com.evereats.fooder.domain.repository.RestaurantRepository;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.List;
@@ -71,24 +76,32 @@ public class RestaurantService {
         return restaurantRepository.save(currentRestaurant);
     }
 
-    public Restaurant partialUpdate(Long restaurantID, Map<String, Object> fields) {
+    public Restaurant partialUpdate(Long restaurantID, Map<String, Object> fields, HttpServletRequest request) {
         Restaurant restaurant = find(restaurantID);
-        merge(fields, restaurant);
+        merge(fields, restaurant, request);
 
         return update(restaurantID, restaurant);
     }
 
-    private void merge(Map<String, Object> fields, Restaurant destiny) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        Restaurant origin = objectMapper.convertValue(fields, Restaurant.class);
+    private void merge(Map<String, Object> fields, Restaurant destiny, HttpServletRequest request) {
+        var serverHttpRequest = new ServletServerHttpRequest(request);
 
-        fields.forEach((name, value) -> {
-            Field field = ReflectionUtils.findField(Restaurant.class, name);
-            field.setAccessible(true);
+        try {
+            var objectMapper = new ObjectMapper();
+            objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+            Restaurant origin = objectMapper.convertValue(fields, Restaurant.class);
 
-            Object newValue = ReflectionUtils.getField(field, origin);
-            ReflectionUtils.setField(field, destiny, newValue);
-        });
+            fields.forEach((name, value) -> {
+                Field field = ReflectionUtils.findField(Restaurant.class, name);
+                field.setAccessible(true);
+
+                Object newValue = ReflectionUtils.getField(field, origin);
+                ReflectionUtils.setField(field, destiny, newValue);
+            });
+        } catch (IllegalArgumentException e) {
+            throw new HttpMessageNotReadableException(e.getMessage(), ExceptionUtils.getRootCause(e), serverHttpRequest);
+        }
     }
 
     public void delete(Long id) {

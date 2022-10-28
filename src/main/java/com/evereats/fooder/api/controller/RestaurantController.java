@@ -8,6 +8,7 @@ import com.evereats.fooder.domain.service.RestaurantService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -71,7 +72,7 @@ public class RestaurantController {
     }
 
     @PutMapping("/{restaurantID}")
-    public Restaurant update(@PathVariable(name = "restaurantID") long restaurantID, @RequestBody Restaurant restaurant) {
+    public Restaurant update(@PathVariable(name = "restaurantID") Long restaurantID, @RequestBody Restaurant restaurant) {
         try {
             return restaurantService.update(restaurantID, restaurant);
         } catch(KitchenNotFoundException e) {
@@ -81,9 +82,9 @@ public class RestaurantController {
 
     @PatchMapping("/{restaurantID}")
     public Restaurant partialUpdate(@PathVariable("restaurantID") Long restaurantID,
-            @RequestBody Map<String, Object> fields) {
+            @RequestBody Map<String, Object> fields, HttpServletRequest request) {
         try {
-            return restaurantService.partialUpdate(restaurantID, fields);
+            return restaurantService.partialUpdate(restaurantID, fields, request);
         } catch(EntityNotFoundException e) {
             throw new DomainException(e.getMessage());
         }

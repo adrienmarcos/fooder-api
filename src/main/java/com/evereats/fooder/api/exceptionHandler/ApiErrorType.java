@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum ApiErrorType {
+    INVALID_PARAMATER("/invalid-parameter", "Invalid parameter"),
     UNRECOGNIZED_PROPERTY("/unrecognized-property", "Unrecognized property"),
     MESSAGE_NOT_READABLE("/message-not-readable", "Message not readable"),
     IGNORED_PROPERTY("/ignored-property", "Ignored property"),

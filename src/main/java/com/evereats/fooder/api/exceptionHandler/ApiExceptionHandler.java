@@ -14,6 +14,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.stream.Collectors;
@@ -37,6 +38,15 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<?> handleEntityInUseException(EntityInUseException ex, WebRequest request) {
         var apiError = createApiErrorBuilder(HttpStatus.CONFLICT, ApiErrorType.ENTITY_IN_USE, ex.getMessage()).build();
         return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.CONFLICT, request);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<?> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, WebRequest request) {
+        var apiError = createApiErrorBuilder(HttpStatus.BAD_REQUEST, ApiErrorType.INVALID_PARAMATER,
+                String.format("The url parameter '%s' it received the value '%s', who is invalid. Fix it and enter a value " +
+                        "compatible with the type '%s'", ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName())).build();
+
+        return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     @Override
@@ -72,7 +82,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .collect(Collectors.joining("."));
 
         var apiError = createApiErrorBuilder(status, ApiErrorType.IGNORED_PROPERTY,
-                String.format("The property '%s' is ignored by the api. Remove it and try again", path)).build();
+                String.format("The property '%s' is unrecognized by the api. Remove it and try again", path)).build();
 
         return handleExceptionInternal(ex, apiError, headers, status, request);
     }
@@ -121,6 +131,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         var apiError = createApiErrorBuilder(status, ApiErrorType.MESSAGE_NOT_READABLE,
                 String.format("The property '%s' received the value '%s' who is a invalid type. Fix it and enter a " +
                         "value compatible with the type %s", path, ex.getValue(), ex.getTargetType().getSimpleName())).build();
+
         return handleExceptionInternal(ex, apiError, headers, status, request);
     }
 }
