@@ -3,7 +3,9 @@ package com.evereats.fooder.api.exceptionHandler;
 import com.evereats.fooder.domain.exception.DomainException;
 import com.evereats.fooder.domain.exception.EntityInUseException;
 import com.evereats.fooder.domain.exception.EntityNotFoundException;
+import com.fasterxml.jackson.databind.exc.IgnoredPropertyException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -42,13 +44,50 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
         if (ExceptionUtils.getRootCause(ex) instanceof InvalidFormatException) {
-            return handleInvalidFormatException((InvalidFormatException) ExceptionUtils.getRootCause(ex), headers, status, request);
+            return handleInvalidFormatException(
+                    (InvalidFormatException) ExceptionUtils.getRootCause(ex), headers, status, request);
+        }
+
+        if (ExceptionUtils.getRootCause(ex) instanceof IgnoredPropertyException) {
+            return handleIgnoredPropertyException(
+                    (IgnoredPropertyException) ExceptionUtils.getRootCause(ex), headers, status, request);
+        }
+
+        if (ExceptionUtils.getRootCause(ex) instanceof UnrecognizedPropertyException) {
+            return handleUnrecognizedPropertyException(
+                    (UnrecognizedPropertyException) ExceptionUtils.getRootCause(ex), headers, status, request);
         }
 
         var apiError = createApiErrorBuilder(HttpStatus.BAD_REQUEST, ApiErrorType.MESSAGE_NOT_READABLE,
                 "The request's body it's not valid. Check syntax error.").build();
 
         return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
+    private ResponseEntity<Object> handleIgnoredPropertyException(
+            IgnoredPropertyException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+        var path = ex.getPath().stream()
+                .map(reference -> reference.getFieldName())
+                .collect(Collectors.joining("."));
+
+        var apiError = createApiErrorBuilder(status, ApiErrorType.IGNORED_PROPERTY,
+                String.format("The property '%s' is ignored by the api. Remove it and try again", path)).build();
+
+        return handleExceptionInternal(ex, apiError, headers, status, request);
+    }
+
+    private ResponseEntity<Object> handleUnrecognizedPropertyException(
+            UnrecognizedPropertyException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+        var path = ex.getPath().stream()
+                .map(reference -> reference.getFieldName())
+                .collect(Collectors.joining("."));
+
+        var apiError = createApiErrorBuilder(status, ApiErrorType.UNRECOGNIZED_PROPERTY,
+                String.format("The property '%s' is unrecognized by the api. Remove it and try again", path)).build();
+
+        return handleExceptionInternal(ex, apiError, headers, status, request);
     }
 
     @Override
