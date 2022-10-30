@@ -4,11 +4,11 @@ import lombok.Getter;
 
 @Getter
 public enum ApiErrorType {
-    INVALID_PARAMATER("/invalid-parameter", "Invalid parameter"),
+    INVALID_PARAMETER("/invalid-parameter", "Invalid parameter"),
     UNRECOGNIZED_PROPERTY("/unrecognized-property", "Unrecognized property"),
     MESSAGE_NOT_READABLE("/message-not-readable", "Message not readable"),
     IGNORED_PROPERTY("/ignored-property", "Ignored property"),
-    ENTITY_NOT_FOUND("/entity-not-found", "Entity not found"),
+    RESOURCE_NOT_FOUND("/resource-not-found", "Resource not found"),
     ENTITY_IN_USE("/entity-in-use", "Entity in use"),
     DOMAIN_ERROR("/domain-error", "Domain error");
 

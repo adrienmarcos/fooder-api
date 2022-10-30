@@ -6,6 +6,7 @@ import com.evereats.fooder.domain.exception.EntityNotFoundException;
 import com.fasterxml.jackson.databind.exc.IgnoredPropertyException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,12 +21,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.stream.Collectors;
 
+@Slf4j
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<?> handleEntityNotFoundException(EntityNotFoundException ex, WebRequest request) {
-        var apiError = createApiErrorBuilder(HttpStatus.NOT_FOUND, ApiErrorType.ENTITY_NOT_FOUND, ex.getMessage()).build();
+        var apiError = createApiErrorBuilder(HttpStatus.NOT_FOUND, ApiErrorType.RESOURCE_NOT_FOUND, ex.getMessage()).build();
         return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
@@ -43,11 +45,20 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<?> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, WebRequest request) {
-        var apiError = createApiErrorBuilder(HttpStatus.BAD_REQUEST, ApiErrorType.INVALID_PARAMATER,
+        var apiError = createApiErrorBuilder(HttpStatus.BAD_REQUEST, ApiErrorType.INVALID_PARAMETER,
                 String.format("The url parameter '%s' it received the value '%s', who is invalid. Fix it and enter a value " +
                         "compatible with the type '%s'", ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName())).build();
 
         return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleNoHandlerFoundException(
+            NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        var apiError = createApiErrorBuilder(HttpStatus.NOT_FOUND, ApiErrorType.RESOURCE_NOT_FOUND,
+                String.format("The resource '%s' you tried to access doesn't exist", ex.getRequestURL())).build();
+
+        return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
     @Override
