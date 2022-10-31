@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum ApiErrorType {
+    INTERNAL_SERVER_ERROR("/internal-error", "Internal error"),
     INVALID_PARAMETER("/invalid-parameter", "Invalid parameter"),
     UNRECOGNIZED_PROPERTY("/unrecognized-property", "Unrecognized property"),
     MESSAGE_NOT_READABLE("/message-not-readable", "Message not readable"),
