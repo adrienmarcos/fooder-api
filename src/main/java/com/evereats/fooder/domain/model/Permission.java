@@ -2,11 +2,13 @@ package com.evereats.fooder.domain.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Data
 @Entity
+@NoArgsConstructor
 @Table(name = "tb_permission")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Permission {

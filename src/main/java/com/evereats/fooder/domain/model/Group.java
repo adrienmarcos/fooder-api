@@ -3,6 +3,7 @@ package com.evereats.fooder.domain.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Data
 @Entity
+@NoArgsConstructor
 @Table(name = "tb_group")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Group {

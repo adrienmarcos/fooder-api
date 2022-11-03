@@ -5,6 +5,7 @@ import com.evereats.fooder.domain.service.KitchenService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -39,7 +40,7 @@ public class KitchenController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Kitchen save(@RequestBody Kitchen kitchen) {
+    public Kitchen save(@RequestBody @Valid Kitchen kitchen) {
         return kitchenService.save(kitchen);
     }
 

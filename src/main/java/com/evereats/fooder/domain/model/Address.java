@@ -1,6 +1,7 @@
 package com.evereats.fooder.domain.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -9,6 +10,7 @@ import javax.persistence.ManyToOne;
 
 @Data
 @Embeddable
+@NoArgsConstructor
 public class Address {
 
     @Column(name = "address_zip_code")
