@@ -38,6 +38,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         var apiError = createApiErrorBuilder(HttpStatus.BAD_REQUEST, ApiErrorType.DOMAIN_ERROR, ex.getMessage()).build();
         return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
+    
 
     @ExceptionHandler(EntityInUseException.class)
     public ResponseEntity<?> handleEntityInUseException(EntityInUseException ex, WebRequest request) {
