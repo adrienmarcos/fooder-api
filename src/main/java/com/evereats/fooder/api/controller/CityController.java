@@ -39,6 +39,7 @@ public class CityController {
         }
     }
 
+    
     @PutMapping("/{cityID}")
     public City update(@PathVariable(name = "cityID") Long cityID, @RequestBody City city) {
         try {
