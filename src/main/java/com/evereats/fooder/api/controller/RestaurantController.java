@@ -1,15 +1,16 @@
 package com.evereats.fooder.api.controller;
 
+import com.evereats.fooder.Groups;
 import com.evereats.fooder.domain.exception.DomainException;
 import com.evereats.fooder.domain.exception.EntityNotFoundException;
 import com.evereats.fooder.domain.exception.KitchenNotFoundException;
 import com.evereats.fooder.domain.model.Restaurant;
 import com.evereats.fooder.domain.service.RestaurantService;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -64,7 +65,7 @@ public class RestaurantController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Restaurant save(@RequestBody @Valid Restaurant restaurant) {
+    public Restaurant save(@RequestBody @Validated(Groups.RestaurantRegister.class) Restaurant restaurant) {
         try {
             return restaurantService.save(restaurant);
         } catch(KitchenNotFoundException e) {

@@ -1,5 +1,6 @@
 package com.evereats.fooder.domain.model;
 
+import com.evereats.fooder.Groups;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.Data;
@@ -21,8 +22,8 @@ import java.util.List;
 public class Kitchen {
 
     @Id
-    @NotNull
     @EqualsAndHashCode.Include
+    @NotNull(groups = Groups.RestaurantRegister.class)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

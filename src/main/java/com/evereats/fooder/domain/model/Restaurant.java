@@ -1,7 +1,7 @@
 package com.evereats.fooder.domain.model;
 
+import com.evereats.fooder.Groups;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sun.istack.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -11,6 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -29,16 +30,16 @@ public class Restaurant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "test message")
+    @NotBlank(groups = Groups.RestaurantRegister.class)
     @Column(nullable = false)
     private String name;
 
-    @PositiveOrZero
+    @PositiveOrZero(groups = Groups.RestaurantRegister.class)
     @Column(name = "freight_tax", nullable = false)
     private BigDecimal freightTax;
 
     @Valid
-    @NotNull
+    @NotNull(groups = Groups.RestaurantRegister.class)
     @ManyToOne
     @JoinColumn(name = "kitchen_id", nullable = false)
     private Kitchen kitchen;
