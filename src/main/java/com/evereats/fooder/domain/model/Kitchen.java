@@ -23,7 +23,7 @@ public class Kitchen {
 
     @Id
     @EqualsAndHashCode.Include
-    @NotNull(groups = Groups.RestaurantRegister.class)
+    @NotNull(groups = Groups.KitchenId.class)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

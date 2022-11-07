@@ -13,6 +13,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import javax.validation.groups.ConvertGroup;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,16 +31,17 @@ public class Restaurant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(groups = Groups.RestaurantRegister.class)
+    @NotBlank
     @Column(nullable = false)
     private String name;
 
-    @PositiveOrZero(groups = Groups.RestaurantRegister.class)
+    @PositiveOrZero
     @Column(name = "freight_tax", nullable = false)
     private BigDecimal freightTax;
 
     @Valid
-    @NotNull(groups = Groups.RestaurantRegister.class)
+    @NotNull
+    @ConvertGroup(to = Groups.KitchenId.class)
     @ManyToOne
     @JoinColumn(name = "kitchen_id", nullable = false)
     private Kitchen kitchen;
