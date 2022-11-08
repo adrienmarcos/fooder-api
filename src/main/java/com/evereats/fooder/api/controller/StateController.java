@@ -5,6 +5,7 @@ import com.evereats.fooder.domain.service.StateService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -29,12 +30,12 @@ public class StateController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public State save(@RequestBody State state) {
+    public State save(@RequestBody @Valid State state) {
         return stateService.save(state);
     }
 
     @PutMapping("/{stateID}")
-    public State update(@PathVariable(name = "stateID") long stateID, @RequestBody State state) {
+    public State update(@PathVariable(name = "stateID") long stateID, @RequestBody @Valid State state) {
         return stateService.update(stateID, state);
     }
 

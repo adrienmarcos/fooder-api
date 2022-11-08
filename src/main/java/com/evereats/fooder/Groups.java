@@ -1,5 +1,6 @@
 package com.evereats.fooder;
 
 public class Groups {
-    public interface KitchenId {}
+    public interface KitchenID {}
+    public interface StateID {}
 }

@@ -7,6 +7,7 @@ import com.evereats.fooder.domain.service.CityService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -31,7 +32,7 @@ public class CityController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public City save(@RequestBody City city) {
+    public City save(@RequestBody @Valid City city) {
         try {
             return cityService.save(city);
         } catch(StateNotFoundException e) {
@@ -39,9 +40,8 @@ public class CityController {
         }
     }
 
-    
     @PutMapping("/{cityID}")
-    public City update(@PathVariable(name = "cityID") Long cityID, @RequestBody City city) {
+    public City update(@PathVariable(name = "cityID") Long cityID, @RequestBody @Valid City city) {
         try {
             return cityService.update(cityID, city);
         } catch(StateNotFoundException e) {

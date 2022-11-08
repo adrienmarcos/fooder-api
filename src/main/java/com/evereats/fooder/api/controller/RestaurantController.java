@@ -73,7 +73,7 @@ public class RestaurantController {
     }
 
     @PutMapping("/{restaurantID}")
-    public Restaurant update(@PathVariable(name = "restaurantID") Long restaurantID, @RequestBody Restaurant restaurant) {
+    public Restaurant update(@PathVariable(name = "restaurantID") Long restaurantID, @RequestBody @Valid Restaurant restaurant) {
         try {
             return restaurantService.update(restaurantID, restaurant);
         } catch(KitchenNotFoundException e) {

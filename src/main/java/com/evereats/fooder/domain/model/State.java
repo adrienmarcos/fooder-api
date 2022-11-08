@@ -1,10 +1,13 @@
 package com.evereats.fooder.domain.model;
 
+import com.evereats.fooder.Groups;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
@@ -14,10 +17,12 @@ import javax.persistence.*;
 public class State {
 
     @Id
+    @NotNull(groups = Groups.StateID.class)
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     @Column(nullable = false)
     private String name;
 }
