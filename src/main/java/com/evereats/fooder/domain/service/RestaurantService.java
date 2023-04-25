@@ -39,8 +39,7 @@ public class RestaurantService {
     }
 
     public Restaurant find(Long id) {
-        Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new RestaurantNotFoundException(id));
-        return restaurant;
+        return restaurantRepository.findById(id).orElseThrow(() -> new RestaurantNotFoundException(id));
     }
 
     public List<Restaurant> findByFreightTax(BigDecimal initialFreightTax, BigDecimal finalFreightTax) {
@@ -72,26 +71,22 @@ public class RestaurantService {
         Restaurant currentRestaurant = find(restaurantID);
         restaurant.setKitchen(kitchenService.find(restaurant.getKitchen().getId()));
         BeanUtils.copyProperties(restaurant, currentRestaurant, "id", "paymentMethods", "address", "registerDate");
-
         return restaurantRepository.save(currentRestaurant);
     }
 
     public Restaurant partialUpdate(Long restaurantID, Map<String, Object> fields, HttpServletRequest request) {
         Restaurant restaurant = find(restaurantID);
         merge(fields, restaurant, request);
-
         return update(restaurantID, restaurant);
     }
 
     private void merge(Map<String, Object> fields, Restaurant destiny, HttpServletRequest request) {
         var serverHttpRequest = new ServletServerHttpRequest(request);
-
         try {
             var objectMapper = new ObjectMapper();
             objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
             Restaurant origin = objectMapper.convertValue(fields, Restaurant.class);
-
             fields.forEach((name, value) -> {
                 Field field = ReflectionUtils.findField(Restaurant.class, name);
                 field.setAccessible(true);
