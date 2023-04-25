@@ -1,6 +1,6 @@
 package com.evereats.fooder.domain.model;
 
-import com.evereats.fooder.Groups;
+import com.evereats.fooder.core.validation.Groups;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -62,8 +62,7 @@ public class Restaurant {
 
     @JsonIgnore
     @ManyToMany
-    @JoinTable(name = "tb_restaurant_payment_method",
-            joinColumns = @JoinColumn(name = "restaurant_id"),
+    @JoinTable(name = "tb_restaurant_payment_method", joinColumns = @JoinColumn(name = "restaurant_id"),
             inverseJoinColumns = @JoinColumn(name = "payment_method_id"))
     private List<PaymentMethod> paymentMethods = new ArrayList<>();
 

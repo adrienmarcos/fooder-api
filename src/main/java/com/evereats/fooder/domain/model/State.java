@@ -1,6 +1,6 @@
 package com.evereats.fooder.domain.model;
 
-import com.evereats.fooder.Groups;
+import com.evereats.fooder.core.validation.Groups;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
