@@ -13,7 +13,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
 @Retention(RUNTIME)
-@Constraint(validatedBy = {})
+@Constraint(validatedBy = { FreightTaxValidator.class })
 @PositiveOrZero
 public @interface FreightTax {
 
@@ -23,4 +23,6 @@ public @interface FreightTax {
     Class<?>[] groups() default { };
 
     Class<? extends Payload>[] payload() default { };
+
+    int minimumValue();
 }

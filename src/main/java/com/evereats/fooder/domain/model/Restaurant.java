@@ -36,7 +36,7 @@ public class Restaurant {
     @Column(nullable = false)
     private String name;
 
-    @FreightTax
+    @FreightTax(minimumValue = 10)
     @Column(name = "freight_tax", nullable = false)
     private BigDecimal freightTax;
 
