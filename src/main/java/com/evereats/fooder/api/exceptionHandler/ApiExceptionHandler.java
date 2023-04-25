@@ -58,7 +58,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         var apiError = createApiErrorBuilder(HttpStatus.BAD_REQUEST, ApiErrorType.INVALID_PARAMETER,
                 String.format("The url parameter '%s' it received the value '%s', who is invalid. Fix it and enter a value " +
                         "compatible with the type '%s'", ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName())).build();
-
         return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
@@ -67,13 +66,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         var apiError = createApiErrorBuilder(HttpStatus.INTERNAL_SERVER_ERROR, ApiErrorType.INTERNAL_SERVER_ERROR,
                 String.format("An unexpected internal error has occurred. Please try again and if the problem persists " +
                         "contact the system administrator")).build();
-
         return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers,
+            HttpStatus status, WebRequest request) {
         List<Field> apiErrorFields = ex.getBindingResult().getFieldErrors().stream()
                 .map(fieldError -> {
                     String message = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
@@ -92,41 +90,35 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleNoHandlerFoundException(
-            NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers,
+            HttpStatus status, WebRequest request) {
         var apiError = createApiErrorBuilder(HttpStatus.NOT_FOUND, ApiErrorType.RESOURCE_NOT_FOUND,
                 String.format("The resource '%s' you tried to access doesn't exist", ex.getRequestURL())).build();
-
         return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
     @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(
-            HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+            HttpHeaders headers, HttpStatus status, WebRequest request) {
         if (ExceptionUtils.getRootCause(ex) instanceof InvalidFormatException) {
-            return handleInvalidFormatException(
-                    (InvalidFormatException) ExceptionUtils.getRootCause(ex), headers, status, request);
+            return handleInvalidFormatException((InvalidFormatException) ExceptionUtils.getRootCause(ex),
+                    headers, status, request);
         }
-
         if (ExceptionUtils.getRootCause(ex) instanceof IgnoredPropertyException) {
-            return handleIgnoredPropertyException(
-                    (IgnoredPropertyException) ExceptionUtils.getRootCause(ex), headers, status, request);
+            return handleIgnoredPropertyException((IgnoredPropertyException) ExceptionUtils.getRootCause(ex),
+                    headers, status, request);
         }
-
         if (ExceptionUtils.getRootCause(ex) instanceof UnrecognizedPropertyException) {
-            return handleUnrecognizedPropertyException(
-                    (UnrecognizedPropertyException) ExceptionUtils.getRootCause(ex), headers, status, request);
+            return handleUnrecognizedPropertyException((UnrecognizedPropertyException) ExceptionUtils.getRootCause(ex),
+                    headers, status, request);
         }
-
         var apiError = createApiErrorBuilder(HttpStatus.BAD_REQUEST, ApiErrorType.MESSAGE_NOT_READABLE,
                 "The request's body it's not valid. Check syntax error.").build();
-
         return handleExceptionInternal(ex, apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
-    private ResponseEntity<Object> handleIgnoredPropertyException(
-            IgnoredPropertyException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    private ResponseEntity<Object> handleIgnoredPropertyException(IgnoredPropertyException ex, HttpHeaders headers,
+            HttpStatus status, WebRequest request) {
 
         var path = ex.getPath().stream()
                 .map(reference -> reference.getFieldName())
@@ -138,8 +130,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, apiError, headers, status, request);
     }
 
-    private ResponseEntity<Object> handleUnrecognizedPropertyException(
-            UnrecognizedPropertyException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    private ResponseEntity<Object> handleUnrecognizedPropertyException(UnrecognizedPropertyException ex,
+            HttpHeaders headers, HttpStatus status, WebRequest request) {
 
         var path = ex.getPath().stream()
                 .map(reference -> reference.getFieldName())
@@ -152,15 +144,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleExceptionInternal(
-            Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
-
+    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
+            HttpStatus status, WebRequest request) {
         if (body == null) {
             body = ApiError.builder().title(status.getReasonPhrase()).status(status.value()).build();
         } else if (body instanceof String) {
             body = ApiError.builder().title((String) body).status(status.value()).build();
         }
-
         return super.handleExceptionInternal(ex, body, headers, status, request);
     }
 
@@ -172,9 +162,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .detail(detail);
     }
 
-    private ResponseEntity<Object> handleInvalidFormatException(
-            InvalidFormatException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-
+    private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex, HttpHeaders headers,
+            HttpStatus status, WebRequest request) {
         var path = ex.getPath().stream()
                 .map(reference -> reference.getFieldName())
                 .collect(Collectors.joining("."));
