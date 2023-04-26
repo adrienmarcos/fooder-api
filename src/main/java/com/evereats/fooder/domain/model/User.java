@@ -38,8 +38,7 @@ public class User {
 
     @JsonIgnore
     @ManyToMany
-    @JoinTable(name = "tb_user_group",
-            joinColumns = @JoinColumn(name = "user_id"),
+    @JoinTable(name = "tb_user_group", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id"))
     private List<Group> groups = new ArrayList<>();
 }

@@ -26,8 +26,7 @@ public class Group {
 
     @JsonIgnore
     @ManyToMany
-    @JoinTable(name = "tb_group_permission",
-            joinColumns = @JoinColumn(name = "group_id"),
+    @JoinTable(name = "tb_group_permission", joinColumns = @JoinColumn(name = "group_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id"))
     private List<Permission> permissions = new ArrayList<>();
 }

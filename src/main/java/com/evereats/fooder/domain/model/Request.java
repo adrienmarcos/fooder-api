@@ -1,12 +1,12 @@
 package com.evereats.fooder.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,6 +27,7 @@ public class Request {
     @Column(name = "subtotal", nullable = false)
     private BigDecimal subTotal;
 
+    @PositiveOrZero
     @Column(name = "freight_tax", nullable = false)
     private BigDecimal freightTax;
 

@@ -1,6 +1,5 @@
 package com.evereats.fooder.domain.model;
 
-import com.evereats.fooder.core.validation.FreightTax;
 import com.evereats.fooder.core.validation.Groups;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -20,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@ZeroIncludesDescription(fieldValue = "freightTax", fieldDescription = "name", requiredDescription = "Free Freight")
 @Data
 @Entity
 @NoArgsConstructor
@@ -36,7 +36,8 @@ public class Restaurant {
     @Column(nullable = false)
     private String name;
 
-    @FreightTax(minimumValue = 10)
+    @NotNull
+    @PositiveOrZero
     @Column(name = "freight_tax", nullable = false)
     private BigDecimal freightTax;
 
