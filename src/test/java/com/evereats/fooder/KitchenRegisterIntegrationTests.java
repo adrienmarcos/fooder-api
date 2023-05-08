@@ -8,6 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.validation.ConstraintViolationException;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @SpringBootTest
 class KitchenRegisterIntegrationTests {
 
@@ -24,5 +28,15 @@ class KitchenRegisterIntegrationTests {
 		Assertions.assertThat(savedKitchen).isNotNull();
 		Assertions.assertThat(savedKitchen.getId()).isNotNull();
 		Assertions.assertThat(savedKitchen.getName()).isEqualTo(kitchenToBeSaved.getName());
+	}
+
+	@Test
+	@DisplayName("Should throw an Error if invalid data is provided")
+	public void save_FailPersistKitchen_whenSuccessful() {
+		assertThrows(ConstraintViolationException.class, () -> {
+			var kitchenToBeSaved = new Kitchen();
+			kitchenToBeSaved.setName(null);
+			var savedKitchen = kitchenService.save(kitchenToBeSaved);
+		});
 	}
 }
