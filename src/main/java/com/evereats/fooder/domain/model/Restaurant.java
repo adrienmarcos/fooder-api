@@ -1,6 +1,7 @@
 package com.evereats.fooder.domain.model;
 
 import com.evereats.fooder.core.validation.Groups;
+import com.evereats.fooder.core.validation.ZeroIncludesDescription;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
