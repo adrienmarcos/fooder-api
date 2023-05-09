@@ -1,5 +1,6 @@
 package com.evereats.fooder;
 
+import com.evereats.fooder.domain.exception.EntityInUseException;
 import com.evereats.fooder.domain.model.Kitchen;
 import com.evereats.fooder.domain.service.KitchenService;
 import org.assertj.core.api.Assertions;
@@ -37,6 +38,15 @@ class KitchenRegisterIntegrationTests {
 			var kitchenToBeSaved = new Kitchen();
 			kitchenToBeSaved.setName(null);
 			var savedKitchen = kitchenService.save(kitchenToBeSaved);
+		});
+	}
+
+	@Test
+	@DisplayName("Should throw an Error if Kitchen is in use")
+	public void delete_FailDeleteKitchen_whenSuccessful() {
+		assertThrows(EntityInUseException.class, () -> {
+			var kitchenToBeDeleted = kitchenService.find(1L);
+			if (kitchenToBeDeleted != null) kitchenService.delete(kitchenToBeDeleted.getId());
 		});
 	}
 }
