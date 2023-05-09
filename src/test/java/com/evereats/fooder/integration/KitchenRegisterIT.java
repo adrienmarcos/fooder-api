@@ -1,4 +1,4 @@
-package com.evereats.fooder;
+package com.evereats.fooder.integration;
 
 import com.evereats.fooder.domain.exception.EntityInUseException;
 import com.evereats.fooder.domain.exception.KitchenNotFoundException;
@@ -15,14 +15,14 @@ import javax.validation.ConstraintViolationException;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
-class KitchenRegisterIntegrationTests {
+class KitchenRegisterIT {
 
 	@Autowired
 	private KitchenService kitchenService;
 
 	@Test
 	@DisplayName("Should register a Kitchen if valid data is provided")
-	public void save_PersistKitchen_whenValidDataIfProvided() {
+	public void create_PersistKitchen_whenValidDataIfProvided() {
 		var kitchenToBeSaved = new Kitchen();
 		kitchenToBeSaved.setName("Chinese");
 		var savedKitchen = kitchenService.save(kitchenToBeSaved);
@@ -34,7 +34,7 @@ class KitchenRegisterIntegrationTests {
 
 	@Test
 	@DisplayName("Should throw an Error if invalid data is provided")
-	public void save_FailPersistKitchen_whenInvalidDataIsProvided() {
+	public void create_FailPersistKitchen_whenInvalidDataIsProvided() {
 		assertThrows(ConstraintViolationException.class, () -> {
 			var kitchenToBeSaved = new Kitchen();
 			kitchenToBeSaved.setName(null);
