@@ -1,6 +1,7 @@
 package com.evereats.fooder;
 
 import com.evereats.fooder.domain.exception.EntityInUseException;
+import com.evereats.fooder.domain.exception.KitchenNotFoundException;
 import com.evereats.fooder.domain.model.Kitchen;
 import com.evereats.fooder.domain.service.KitchenService;
 import org.assertj.core.api.Assertions;
@@ -21,7 +22,7 @@ class KitchenRegisterIntegrationTests {
 
 	@Test
 	@DisplayName("Should register a Kitchen if valid data is provided")
-	public void save_PersistKitchen_whenSuccessful() {
+	public void save_PersistKitchen_whenValidDataIfProvided() {
 		var kitchenToBeSaved = new Kitchen();
 		kitchenToBeSaved.setName("Chinese");
 		var savedKitchen = kitchenService.save(kitchenToBeSaved);
@@ -33,7 +34,7 @@ class KitchenRegisterIntegrationTests {
 
 	@Test
 	@DisplayName("Should throw an Error if invalid data is provided")
-	public void save_FailPersistKitchen_whenSuccessful() {
+	public void save_FailPersistKitchen_whenInvalidDataIsProvided() {
 		assertThrows(ConstraintViolationException.class, () -> {
 			var kitchenToBeSaved = new Kitchen();
 			kitchenToBeSaved.setName(null);
@@ -43,9 +44,18 @@ class KitchenRegisterIntegrationTests {
 
 	@Test
 	@DisplayName("Should throw an Error if Kitchen is in use")
-	public void delete_FailDeleteKitchen_whenSuccessful() {
+	public void delete_FailDeleteKitchen_whenKitchenIsInUse() {
 		assertThrows(EntityInUseException.class, () -> {
 			var kitchenToBeDeleted = kitchenService.find(1L);
+			if (kitchenToBeDeleted != null) kitchenService.delete(kitchenToBeDeleted.getId());
+		});
+	}
+
+	@Test
+	@DisplayName("Should throw an Error if Kitchen is not found")
+	public void delete_FailDeleteKitchen_whenKitchenIsNotFound() {
+		assertThrows(KitchenNotFoundException.class, () -> {
+			var kitchenToBeDeleted = kitchenService.find(-1L);
 			if (kitchenToBeDeleted != null) kitchenService.delete(kitchenToBeDeleted.getId());
 		});
 	}
