@@ -1,4 +1,4 @@
-package com.evereats.fooder.integration;
+package com.evereats.fooder.integration.kitchen;
 
 import com.evereats.fooder.domain.exception.EntityInUseException;
 import com.evereats.fooder.domain.exception.KitchenNotFoundException;
@@ -22,7 +22,7 @@ class KitchenRegisterIT {
 
 	@Test
 	@DisplayName("Should register a Kitchen if valid data is provided")
-	public void create_PersistKitchen_whenValidDataIfProvided() {
+	public void save_PersistKitchen_whenSuccessful() {
 		var kitchenToBeSaved = new Kitchen();
 		kitchenToBeSaved.setName("Chinese");
 		var savedKitchen = kitchenService.save(kitchenToBeSaved);
@@ -34,7 +34,7 @@ class KitchenRegisterIT {
 
 	@Test
 	@DisplayName("Should throw an Error if invalid data is provided")
-	public void create_FailPersistKitchen_whenInvalidDataIsProvided() {
+	public void save_FailPersistKitchen_whenSuccessful() {
 		assertThrows(ConstraintViolationException.class, () -> {
 			var kitchenToBeSaved = new Kitchen();
 			kitchenToBeSaved.setName(null);
@@ -44,7 +44,7 @@ class KitchenRegisterIT {
 
 	@Test
 	@DisplayName("Should throw an Error if Kitchen is in use")
-	public void delete_FailDeleteKitchen_whenKitchenIsInUse() {
+	public void delete_FailDeleteKitchenInUse_whenKitchenIsInUse() {
 		assertThrows(EntityInUseException.class, () -> {
 			var kitchenToBeDeleted = kitchenService.find(1L);
 			if (kitchenToBeDeleted != null) kitchenService.delete(kitchenToBeDeleted.getId());
