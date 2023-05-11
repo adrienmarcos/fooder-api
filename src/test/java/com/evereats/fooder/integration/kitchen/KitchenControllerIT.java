@@ -48,7 +48,7 @@ public class KitchenControllerIT {
     }
 
     @Test
-    @DisplayName("Should return status 200")
+    @DisplayName("Should list Kitchens and return status 200")
     public void get_shouldReturnStatus200_whenSuccessful() {
         RestAssured.given()
                 .accept(ContentType.JSON)
@@ -67,7 +67,7 @@ public class KitchenControllerIT {
     }
 
     @Test
-    @DisplayName("Should return 02 Kitchens and status 200")
+    @DisplayName("Should contains 02 Kitchens and status 200")
     public void get_shouldReturnTwoKitchenAndStatus200_whenSuccessful() {
         RestAssured.given()
                 .accept(ContentType.JSON)
@@ -86,5 +86,15 @@ public class KitchenControllerIT {
                 .then()
                     .statusCode(HttpStatus.OK.value())
                     .body("name", Matchers.equalTo("Chinese"));
+    }
+
+    @Test
+    @DisplayName("Should return status 404 when Kitchen is not found")
+    public void get_shouldReturn404_whenKitchenIsNotFound() {
+        RestAssured.given()
+                .pathParam("kitchenId", 999)
+                .accept(ContentType.JSON)
+                .when().get("/{kitchenId}")
+                .then().statusCode(404);
     }
 }
