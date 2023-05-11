@@ -74,4 +74,17 @@ public class KitchenControllerIT {
                 .when().get()
                 .then().body("", Matchers.hasSize(2));
     }
+
+    @Test
+    @DisplayName("Should find Kitchen by ID and return status 200")
+    public void get_shouldFindKitchenById_whenSuccessful() {
+        RestAssured.given()
+                .pathParam("kitchenId", 2)
+                .accept(ContentType.JSON)
+                .when()
+                    .get("/{kitchenId}")
+                .then()
+                    .statusCode(HttpStatus.OK.value())
+                    .body("name", Matchers.equalTo("Chinese"));
+    }
 }
