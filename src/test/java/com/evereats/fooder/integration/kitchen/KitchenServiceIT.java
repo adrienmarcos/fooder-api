@@ -4,18 +4,21 @@ import com.evereats.fooder.domain.exception.EntityInUseException;
 import com.evereats.fooder.domain.exception.KitchenNotFoundException;
 import com.evereats.fooder.domain.model.Kitchen;
 import com.evereats.fooder.domain.service.KitchenService;
+import com.evereats.fooder.util.DatabaseCleaner;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import javax.validation.ConstraintViolationException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
-class KitchenRegisterIT {
+@TestPropertySource("/application-test.properties")
+class KitchenServiceIT {
 
 	@Autowired
 	private KitchenService kitchenService;
